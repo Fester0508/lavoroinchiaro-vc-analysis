@@ -90,6 +90,7 @@ const sections = [
   { id: "modelli", label: "2. Modelli di Business" },
   { id: "scelto", label: "3. Modello Scelto" },
   { id: "proiezioni", label: "4. Proiezioni Finanziarie" },
+  { id: "detailed-projections", label: "4B. Proiezioni Dettagliate" },
   { id: "eu-expansion", label: "5. Espansione EU" },
   { id: "rischi", label: "6. Rischi Reali" },
   { id: "responso", label: "7. Responso Finale" },
@@ -270,6 +271,16 @@ export default function Home() {
     { stage: "Pay-Per (€3,99)", count: 11250, color: "#3B82F6" },
     { stage: "Abbonamento (€0,99)", count: 2812, color: "#10B981" },
     { stage: "Pro (€9,99)", count: 281, color: "#EC4899" },
+  ];
+
+  const detailedProjections = [
+    { period: "30 giorni", revenue: 0.8, costs: 8.2, ebitda: -7.4, users: 500, status: "lancio" },
+    { period: "90 giorni", revenue: 4.2, costs: 18.5, ebitda: -14.3, users: 3000, status: "early" },
+    { period: "120 giorni", revenue: 7.5, costs: 22.0, ebitda: -14.5, users: 5000, status: "growth" },
+    { period: "180 giorni", revenue: 46.8, costs: 61.5, ebitda: -14.7, users: 15000, status: "transition" },
+    { period: "1 anno", revenue: 364.5, costs: 195.5, ebitda: 169.0, users: 75000, status: "profitable" },
+    { period: "3 anni", revenue: 5550, costs: 2050, ebitda: 3500, users: 750000, status: "scale" },
+    { period: "5 anni", revenue: 12000, costs: 3600, ebitda: 8400, users: 1500000, status: "mature" },
   ];
 
   return (
@@ -690,6 +701,135 @@ export default function Home() {
                   <strong className="text-slate-300">Profittabilità positiva:</strong> Mese 10+<br />
                   <strong className="text-slate-300">ROI positivo (seed €400K):</strong> Mese 16-18<br />
                   <strong className="text-slate-300">Margine EBITDA anno 3:</strong> 63% (€3,5M su €5,55M revenue)
+                </div>
+              </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════
+                4B. PROIEZIONI DETTAGLIATE
+            ═══════════════════════════════════════════════════════════ */}
+            <section id="detailed-projections">
+              <SectionHeader
+                number="Sezione 4B"
+                title="Proiezioni Dettagliate: 30gg, 90gg, 120gg, 180gg, 1-3-5 anni"
+                subtitle="Ricavi, costi, utili/perdite, e milestone critici"
+                verdict={{ label: "Dettagliato", type: "neutral" }}
+              />
+
+              {/* Grafico timeline */}
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6 mb-8">
+                <h3 className="text-sm font-semibold text-slate-300 mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Ricavi, Costi, EBITDA nel Tempo
+                </h3>
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={detailedProjections}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
+                      <XAxis dataKey="period" tick={{ fill: "#94A3B8", fontSize: 9 }} angle={-45} textAnchor="end" height={80} />
+                      <YAxis tick={{ fill: "#64748B", fontSize: 11 }} tickFormatter={(v) => `€${v}K`} />
+                      <Tooltip content={<CustomTooltip suffix="K" />} />
+                      <Legend wrapperStyle={{ color: "#94A3B8", fontSize: 11 }} />
+                      <Line type="monotone" dataKey="revenue" stroke="#10B981" strokeWidth={2} name="Revenue" dot={{ fill: "#10B981", r: 4 }} />
+                      <Line type="monotone" dataKey="costs" stroke="#EF4444" strokeWidth={2} name="Costi" dot={{ fill: "#EF4444", r: 4 }} />
+                      <Line type="monotone" dataKey="ebitda" stroke="#3B82F6" strokeWidth={2} name="EBITDA" dot={{ fill: "#3B82F6", r: 4 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Tabella dettagliata */}
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl overflow-hidden mb-8">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-white/10">
+                        <th className="text-left px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Periodo</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Ricavi (€K)</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Costi (€K)</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">EBITDA (€K)</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Utenti</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Margine %</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {detailedProjections.map((proj, i) => {
+                        const margin = proj.revenue > 0 ? ((proj.ebitda / proj.revenue) * 100).toFixed(1) : "N/A";
+                        const statusColor = proj.ebitda >= 0 ? "#10B981" : proj.ebitda > -15 ? "#F59E0B" : "#EF4444";
+                        const statusLabel = proj.ebitda >= 0 ? "✓ Profittabile" : proj.ebitda > -15 ? "⚠ Quasi break-even" : "✗ In perdita";
+                        return (
+                          <tr key={i} className="border-b border-white/5 hover:bg-white/3 transition-colors">
+                            <td className="px-5 py-3 font-medium text-xs text-slate-300">{proj.period}</td>
+                            <td className="px-5 py-3 font-mono text-xs text-center text-emerald-400">€{proj.revenue.toFixed(1)}</td>
+                            <td className="px-5 py-3 font-mono text-xs text-center text-red-400">€{proj.costs.toFixed(1)}</td>
+                            <td className="px-5 py-3 font-mono text-xs text-center" style={{ color: statusColor }}>
+                              €{proj.ebitda.toFixed(1)}
+                            </td>
+                            <td className="px-5 py-3 font-mono text-xs text-center text-slate-400">
+                              {proj.users >= 1000 ? `${(proj.users / 1000).toFixed(0)}K` : proj.users}
+                            </td>
+                            <td className="px-5 py-3 font-mono text-xs text-center" style={{ color: statusColor }}>
+                              {margin}%
+                            </td>
+                            <td className="px-5 py-3 text-xs text-center" style={{ color: statusColor }}>
+                              {statusLabel}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Key Milestones */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
+                  <h3 className="font-semibold text-white text-sm mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                    Milestone Critici
+                  </h3>
+                  <div className="space-y-3">
+                    {[
+                      { milestone: "30 giorni", desc: "Lancio MVP, primi 500 utenti", status: "✓" },
+                      { milestone: "90 giorni", desc: "3K utenti, validazione PMF", status: "✓" },
+                      { milestone: "180 giorni", desc: "15K utenti, inizio transizione Ultra-Low", status: "✓" },
+                      { milestone: "Mese 8-9", desc: "BREAK-EVEN operativo raggiunto", status: "🎯" },
+                      { milestone: "1 anno", desc: "75K utenti, profittabilità positiva", status: "✓" },
+                      { milestone: "3 anni", desc: "750K utenti, EBITDA €3,5M, EU scale", status: "✓" },
+                    ].map((item, i) => (
+                      <div key={i} className="border-l-2 border-blue-500/30 pl-4">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-semibold text-xs text-white">{item.milestone}</span>
+                          <span className="text-lg">{item.status}</span>
+                        </div>
+                        <p className="text-xs text-slate-400">{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
+                  <h3 className="font-semibold text-white text-sm mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                    Metriche di Crescita
+                  </h3>
+                  <div className="space-y-3">
+                    {[
+                      { metric: "CAC", value: "€10", baseline: "Conservativo" },
+                      { metric: "LTV (24 mesi)", value: "€14,00", baseline: "Scenario base" },
+                      { metric: "LTV (ottimizzato)", value: "€67,50", baseline: "Con retention" },
+                      { metric: "Churn mensile", value: "8%", baseline: "Target" },
+                      { metric: "Conversion free→paid", value: "15%", baseline: "Mese 1-6" },
+                      { metric: "Upsell abbonamento", value: "25%", baseline: "Da Pay-Per" },
+                    ].map((item, i) => (
+                      <div key={i} className="flex justify-between items-center text-xs">
+                        <span className="text-slate-400">{item.metric}</span>
+                        <div className="text-right">
+                          <div className="font-mono font-bold text-blue-400">{item.value}</div>
+                          <div className="text-slate-500 text-xs">{item.baseline}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </section>
