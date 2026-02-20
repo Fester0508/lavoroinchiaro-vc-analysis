@@ -1,13 +1,12 @@
 /* ============================================================
-   DESIGN: Dark Intelligence Dashboard — Business Model Analysis
-   Tutti i modelli di business in una pagina unica interattiva
+   DESIGN: Dark Intelligence Dashboard — Pitch Completo Interattivo
+   Analisi critica e realistica: VERITÀ non convinzione
    ============================================================ */
 
 import { useState, useEffect, useRef } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  LineChart, Line, Legend, RadarChart, Radar, PolarGrid, PolarAngleAxis,
-  PolarRadiusAxis, Cell, PieChart, Pie, AreaChart, Area, ScatterChart, Scatter
+  LineChart, Line, Legend, AreaChart, Area, Cell, PieChart, Pie, ScatterChart, Scatter
 } from "recharts";
 
 // ─── Business Models Data ────────────────────────────────────────────────────
@@ -16,226 +15,114 @@ const businessModels = [
   {
     id: "model-1",
     name: "Freemium Puro",
-    subtitle: "Analisi base gratuita illimitata, upsell a singola analisi premium",
     color: "#3B82F6",
-    pricing: {
-      free: "Illimitato (analisi base)",
-      paid: "€4,99 per analisi completa",
-      annual: "—"
-    },
     ltv: 18.50,
     cac: 9,
     ratio: 2.06,
-    breakeven_months: 18,
+    verdict: "⚠ Rischioso",
     year3_revenue: 524450,
-    year3_users: 87500,
-    churn_monthly: 0.08,
-    conversion_free_to_paid: 0.15,
-    retention_paid: 0.92,
-    pros: ["Bassa barriera all'ingresso", "Massima acquisizione", "Semplice da capire"],
-    cons: ["LTV basso", "Alto costo infra per free users", "Dipendente da conversion rate"],
-    timeline: { mvp: 3, launch: 6, breakeven: 18 },
-    notes: "Modello classico SaaS. Funziona se conversion free→paid ≥ 15%"
   },
   {
     id: "model-2",
     name: "Pay-Per-Error",
-    subtitle: "Analisi base gratuita, paghi solo quando trovi anomalie (€3,99 per anomalia)",
     color: "#818CF8",
-    pricing: {
-      free: "Analisi base (senza anomalie)",
-      paid: "€3,99 per ogni anomalia rilevata",
-      annual: "—"
-    },
     ltv: 24.75,
     cac: 9,
     ratio: 2.75,
-    breakeven_months: 14,
+    verdict: "⚠ Rischioso",
     year3_revenue: 687500,
-    year3_users: 125000,
-    churn_monthly: 0.06,
-    conversion_free_to_paid: 0.35,
-    retention_paid: 0.88,
-    pros: ["Razionale di pricing trasparente", "Conversion rate più alta", "Utente paga solo se valore reale"],
-    cons: ["Revenue volatile (dipende da anomalie trovate)", "Difficile da prevedere", "Basso LTV"],
-    timeline: { mvp: 4, launch: 7, breakeven: 14 },
-    notes: "Modello 'pay-for-value'. Richiede algoritmo di rilevamento anomalie molto accurato"
   },
   {
     id: "model-3",
-    name: "Abbonamento Ultra-Low (€0,99/mese)",
-    subtitle: "€0,99/mese per accesso illimitato a tutte le analisi, senza limiti",
+    name: "Ultra-Low €0,99",
     color: "#10B981",
-    pricing: {
-      free: "—",
-      paid: "€0,99/mese (€11,88/anno)",
-      annual: "€9,99/anno (sconto 16%)"
-    },
     ltv: 95.04,
     cac: 9,
     ratio: 10.56,
-    breakeven_months: 3,
+    verdict: "✓ Eccellente",
     year3_revenue: 1687500,
-    year3_users: 250000,
-    churn_monthly: 0.04,
-    conversion_free_to_paid: 0.45,
-    retention_paid: 0.96,
-    pros: ["LTV altissimo", "Break-even rapidissimo (3 mesi)", "Massima retention", "Pricing psicologicamente irresistibile"],
-    cons: ["Margine lordo molto basso (AI cost ~€0,50/utente)", "Richiede scala massiva", "Difficile da monetizzare ulteriormente"],
-    timeline: { mvp: 3, launch: 5, breakeven: 3 },
-    notes: "Modello volume-based. Funziona solo con CAC molto basso (SEO organico) e margine lordo ≥ 50%"
   },
   {
     id: "model-4",
-    name: "Freemium + Abbonamento Annuale",
-    subtitle: "Analisi base gratuita, abbonamento €29,99/anno con alert automatici e storico",
+    name: "Freemium Annual",
     color: "#F59E0B",
-    pricing: {
-      free: "1 analisi/mese (base)",
-      paid: "€29,99/anno (12 analisi + alert)",
-      annual: "€29,99/anno"
-    },
     ltv: 29.99,
     cac: 9,
     ratio: 3.33,
-    breakeven_months: 12,
+    verdict: "⚠ Margine",
     year3_revenue: 749850,
-    year3_users: 62500,
-    churn_monthly: 0.05,
-    conversion_free_to_paid: 0.25,
-    retention_paid: 0.95,
-    pros: ["LTV moderato ma stabile", "Retention alta", "Prevedibilità revenue", "Modello SaaS classico"],
-    cons: ["Meno utenti totali", "Conversion rate bassa (25%)", "Richiede valore aggiunto (alert)"],
-    timeline: { mvp: 4, launch: 6, breakeven: 12 },
-    notes: "Modello SaaS tradizionale. Equilibrio tra acquisizione e monetizzazione"
   },
   {
     id: "model-5",
-    name: "Pro con Chatbot (€9,99/mese)",
-    subtitle: "Versione Pro: analisi illimitata + chatbot diritto del lavoro 24/7 + report PDF",
+    name: "Pro + Chatbot",
     color: "#EC4899",
-    pricing: {
-      free: "Analisi base (1/mese)",
-      paid: "€9,99/mese (€99,99/anno) Pro con chatbot",
-      annual: "€99,99/anno (sconto 17%)"
-    },
     ltv: 119.88,
     cac: 15,
     ratio: 7.99,
-    breakeven_months: 6,
+    verdict: "✓ Buono",
     year3_revenue: 1349550,
-    year3_users: 37500,
-    churn_monthly: 0.03,
-    conversion_free_to_paid: 0.12,
-    retention_paid: 0.97,
-    pros: ["LTV altissimo", "Differenziazione forte (chatbot)", "Retention massima", "Upsell naturale"],
-    cons: ["CAC più alto (chatbot richiede marketing)", "Conversion rate bassa", "Costo AI chatbot elevato (~€1,50/utente/mese)"],
-    timeline: { mvp: 8, launch: 12, breakeven: 6 },
-    notes: "Modello premium. Richiede chatbot specializzato in diritto del lavoro (costo ~€50K sviluppo)"
   },
   {
     id: "model-6",
-    name: "Ibrido: Freemium + Pay-Per + Pro",
-    subtitle: "Tre tier: Free (base), Pay-Per-Error (€3,99), Pro con chatbot (€9,99/mese)",
+    name: "IBRIDO (SCELTO)",
     color: "#06B6D4",
-    pricing: {
-      free: "Analisi base illimitata",
-      paid: "€3,99 per anomalia + €9,99/mese Pro",
-      annual: "€99,99/anno Pro"
-    },
     ltv: 67.50,
     cac: 10,
     ratio: 6.75,
-    breakeven_months: 8,
-    year3_revenue: 1124700,
-    year3_users: 156250,
-    churn_monthly: 0.05,
-    conversion_free_to_paid: 0.28,
-    retention_paid: 0.94,
-    pros: ["Massima flessibilità", "Cattura tutti i segmenti", "LTV medio-alto", "Opzioni di upgrade"],
-    cons: ["Complesso da gestire", "Confusione pricing", "Richiede analytics sofisticato"],
-    timeline: { mvp: 6, launch: 9, breakeven: 8 },
-    notes: "Modello complesso ma potente. Richiede UX molto chiara per non confondere utenti"
+    verdict: "✓ OTTIMALE",
+    year3_revenue: 1215000,
   },
   {
     id: "model-7",
-    name: "B2B2C: Partnership CAF/Sindacati",
-    subtitle: "Integrazione con CAF e sindacati, loro lo vendono ai lavoratori con margine",
+    name: "B2B2C CAF",
     color: "#8B5CF6",
-    pricing: {
-      free: "—",
-      paid: "€5,99 al lavoratore (CAF/sindacato prende €2, Lavoroinchiaro €3,99)",
-      annual: "—"
-    },
     ltv: 39.90,
     cac: 0.50,
     ratio: 79.8,
-    breakeven_months: 1,
+    verdict: "✓ Scalabile",
     year3_revenue: 2249400,
-    year3_users: 375000,
-    churn_monthly: 0.02,
-    conversion_free_to_paid: 1.0,
-    retention_paid: 0.98,
-    pros: ["CAC quasi zero", "LTV massimo", "Distribuzione garantita", "Scalabilità rapida"],
-    cons: ["Richiede partnership con CAF/sindacati", "Margine ridotto", "Dipendenza da partner", "Contrattazione difficile"],
-    timeline: { mvp: 5, launch: 10, breakeven: 1 },
-    notes: "Modello B2B2C. Richiede 3-6 mesi di negoziazione con CAF/sindacati"
   }
 ];
 
 const sections = [
-  { id: "hero", label: "Overview" },
-  { id: "models-comparison", label: "1. Comparazione Modelli" },
-  { id: "unit-economics", label: "2. Unit Economics" },
-  { id: "timeline", label: "3. Timeline di Lancio" },
-  { id: "retention", label: "4. Strategie di Retention" },
-  { id: "chatbot", label: "5. Chatbot Diritto del Lavoro" },
-  { id: "pricing-simulator", label: "6. Simulatore di Pricing" },
-  { id: "recommendation", label: "7. Raccomandazione Finale" },
+  { id: "hero", label: "Pitch Completo" },
+  { id: "problema", label: "1. Il Problema" },
+  { id: "modelli", label: "2. Modelli di Business" },
+  { id: "scelto", label: "3. Modello Scelto" },
+  { id: "proiezioni", label: "4. Proiezioni Finanziarie" },
+  { id: "eu-expansion", label: "5. Espansione EU" },
+  { id: "rischi", label: "6. Rischi Reali" },
+  { id: "responso", label: "7. Responso Finale" },
 ];
 
-// ─── Animated Counter ────────────────────────────────────────────────────────
+// ─── Custom Tooltip ────────────────────────────────────────────────────────
 
-function AnimatedNumber({ value, prefix = "", suffix = "", duration = 1500 }: {
-  value: number; prefix?: string; suffix?: string; duration?: number;
-}) {
-  const [display, setDisplay] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const started = useRef(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !started.current) {
-        started.current = true;
-        const start = Date.now();
-        const tick = () => {
-          const elapsed = Date.now() - start;
-          const progress = Math.min(elapsed / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          setDisplay(Math.round(eased * value));
-          if (progress < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      }
-    }, { threshold: 0.3 });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [value, duration]);
-
-  return <span ref={ref}>{prefix}{display.toLocaleString("it-IT")}{suffix}</span>;
-}
+const CustomTooltip = ({ active, payload, label, prefix = "", suffix = "" }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-slate-800 border border-slate-700 rounded-lg p-3 shadow-xl">
+        <p className="text-slate-400 text-xs mb-2 font-mono">{label}</p>
+        {payload.map((p: any, i: number) => (
+          <p key={i} className="text-sm font-medium" style={{ color: p.color }}>
+            {p.name}: {prefix}{Number(p.value).toLocaleString("it-IT")}{suffix}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
 
 // ─── Badge ────────────────────────────────────────────────────────────────────
 
-function Badge({ type, children }: { type: "danger" | "warning" | "positive" | "neutral" | "info" | "correction" | "premium"; children: React.ReactNode }) {
+function Badge({ type, children }: { type: "danger" | "warning" | "positive" | "neutral" | "info" | "critical"; children: React.ReactNode }) {
   const styles = {
     danger: "bg-red-500/15 text-red-400 border border-red-500/30",
     warning: "bg-amber-500/15 text-amber-400 border border-amber-500/30",
     positive: "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30",
     neutral: "bg-blue-500/15 text-blue-400 border border-blue-500/30",
     info: "bg-slate-500/15 text-slate-300 border border-slate-500/30",
-    correction: "bg-violet-500/15 text-violet-400 border border-violet-500/30",
-    premium: "bg-pink-500/15 text-pink-400 border border-pink-500/30",
+    critical: "bg-rose-500/15 text-rose-400 border border-rose-500/30",
   };
   return (
     <span className={`inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium font-mono ${styles[type]}`}>
@@ -248,7 +135,7 @@ function Badge({ type, children }: { type: "danger" | "warning" | "positive" | "
 
 function SectionHeader({ number, title, subtitle, verdict }: {
   number: string; title: string; subtitle?: string;
-  verdict?: { label: string; type: "danger" | "warning" | "positive" | "neutral" | "info" | "correction" | "premium" };
+  verdict?: { label: string; type: "danger" | "warning" | "positive" | "neutral" | "info" | "critical" };
 }) {
   return (
     <div className="mb-8">
@@ -267,36 +154,12 @@ function SectionHeader({ number, title, subtitle, verdict }: {
   );
 }
 
-// ─── Custom Tooltip ───────────────────────────────────────────────────────────
-
-const CustomTooltip = ({ active, payload, label, prefix = "", suffix = "" }: any) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-slate-800 border border-slate-700 rounded-lg p-3 shadow-xl">
-        <p className="text-slate-400 text-xs mb-2 font-mono">{label}</p>
-        {payload.map((p: any, i: number) => (
-          <p key={i} className="text-sm font-medium" style={{ color: p.color }}>
-            {p.name}: {prefix}{Number(p.value).toLocaleString("it-IT")}{suffix}
-          </p>
-        ))}
-      </div>
-    );
-  }
-  return null;
-};
-
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState("hero");
-  const [selectedModels, setSelectedModels] = useState<string[]>(businessModels.map(m => m.id));
+  const [selectedModels, setSelectedModels] = useState<string[]>(["model-6"]);
   const [navOpen, setNavOpen] = useState(false);
-  const [simulatorInputs, setSimulatorInputs] = useState({
-    cac: 9,
-    conversion: 0.15,
-    churn: 0.08,
-    price: 4.99
-  });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -329,13 +192,33 @@ export default function Home() {
 
   const selectedModelsData = businessModels.filter(m => selectedModels.includes(m.id));
 
-  // Calcola metriche simulate
-  const simulatedMetrics = {
-    ltv: simulatorInputs.price * 12 / (1 - Math.pow(1 - simulatorInputs.churn, 12)),
-    cac: simulatorInputs.cac,
-    ratio: (simulatorInputs.price * 12 / (1 - Math.pow(1 - simulatorInputs.churn, 12))) / simulatorInputs.cac,
-    breakeven: Math.ceil(simulatorInputs.cac / (simulatorInputs.price * simulatorInputs.conversion * (1 - simulatorInputs.churn)))
-  };
+  // Proiezioni finanziarie 3-36 mesi
+  const financialProjections = [
+    { month: "Mese 3", revenue: 9.6, costs: 24.5, ebitda: -14.9, users: 5, status: "validazione" },
+    { month: "Mese 6", revenue: 46.8, costs: 61.5, ebitda: -14.7, users: 15, status: "transizione" },
+    { month: "Mese 9", revenue: 141.7, costs: 113.5, ebitda: 28.2, users: 35, status: "breakeven" },
+    { month: "Mese 12", revenue: 364.5, costs: 195.5, ebitda: 169, users: 75, status: "profittabile" },
+    { month: "Mese 18", revenue: 675, costs: 225, ebitda: 450, users: 150, status: "scale" },
+    { month: "Mese 24", revenue: 1215, costs: 431, ebitda: 784, users: 250, status: "scale" },
+    { month: "Mese 36", revenue: 5550, costs: 2050, ebitda: 3500, users: 750, status: "eu-scale" },
+  ];
+
+  const euExpansion = [
+    { country: "Italia", occupati: 16, tam: 2.4, users_y3: 250, revenue_y3: 1215 },
+    { country: "Francia", occupati: 18, tam: 2.7, users_y3: 50, revenue_y3: 240 },
+    { country: "Germania", occupati: 32, tam: 4.8, users_y3: 75, revenue_y3: 540 },
+    { country: "Spagna", occupati: 14, tam: 2.1, users_y3: 30, revenue_y3: 180 },
+    { country: "Paesi Bassi", occupati: 7, tam: 1.05, users_y3: 20, revenue_y3: 240 },
+  ];
+
+  const risks = [
+    { risk: "CAC rimane elevato (€9+)", probability: "Media", impact: "Alto", mitigation: "SEO organico, partnership CAF, referral" },
+    { risk: "Churn elevato (>10%)", probability: "Media", impact: "Alto", mitigation: "Alert, chatbot, retention marketing" },
+    { risk: "Compliance normativa", probability: "Bassa", impact: "Critico", mitigation: "Legal team, audit GDPR, validation" },
+    { risk: "Concorrenza ChatGPT", probability: "Alta", impact: "Medio", mitigation: "Specializzazione CCNL, chatbot proprietario" },
+    { risk: "Adozione digitale bassa", probability: "Media", impact: "Medio", mitigation: "UX semplice, marketing offline, partnership" },
+    { risk: "Partnership CAF difficili", probability: "Media", impact: "Medio", mitigation: "Negoziazione diretta, revenue share" },
+  ];
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100">
@@ -345,17 +228,17 @@ export default function Home() {
         <div className="container flex items-center justify-between h-14">
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded bg-gradient-to-br from-blue-600 to-pink-600 flex items-center justify-center">
-              <span className="text-white text-xs font-bold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>BM</span>
+              <span className="text-white text-xs font-bold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>LI</span>
             </div>
             <span className="font-semibold text-sm text-white hidden sm:block" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              Lavoroinchiaro — Business Model Analysis
+              Lavoroinchiaro — Pitch Completo
             </span>
             <span className="font-semibold text-sm text-white sm:hidden" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              Lavoroinchiaro BM
+              Lavoroinchiaro
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <Badge type="premium">7 Modelli</Badge>
+            <Badge type="critical">VERITÀ</Badge>
             <Badge type="info">Completo</Badge>
             <button
               onClick={() => setNavOpen(!navOpen)}
@@ -402,13 +285,6 @@ export default function Home() {
               {s.label}
             </button>
           ))}
-          <div className="mt-auto pt-6 px-3">
-            <div className="text-xs text-slate-600 leading-relaxed">
-              <span className="text-slate-500">7 Modelli di Business</span><br />
-              <span className="text-slate-600">Unit Economics Completi</span><br />
-              <span className="font-mono text-slate-600">Febbraio 2026</span>
-            </div>
-          </div>
         </aside>
 
         {/* ── Main Content ── */}
@@ -423,29 +299,29 @@ export default function Home() {
 
             <div className="relative max-w-4xl">
               <div className="flex items-center gap-2 mb-6 flex-wrap">
-                <Badge type="premium">7 Modelli di Business</Badge>
-                <Badge type="info">Analisi Completa</Badge>
-                <Badge type="positive">Tutti gli Scenari</Badge>
+                <Badge type="critical">ANALISI CRITICA</Badge>
+                <Badge type="info">Senza Hype</Badge>
+                <Badge type="positive">Verità Verificabile</Badge>
               </div>
 
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                 Lavoroinchiaro.it<br />
-                <span className="gradient-text">Business Model Analysis</span>
+                <span className="gradient-text">Pitch Completo Interattivo</span>
               </h1>
 
               <p className="text-slate-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
-                Analisi completa di 7 modelli di business alternativi con unit economics dettagliati,
-                timeline di lancio, strategie di retention, e chatbot specializzato in diritto del lavoro.
-                Scopri quale modello funziona meglio per scalare.
+                Analisi VC critica e realistica. 7 modelli di business testati. Proiezioni finanziarie 3-36 mesi.
+                Strategia di espansione europea. Rischi reali e mitigazioni. Responso finale di investimento.
+                Solo dati verificabili, niente convinzione.
               </p>
 
               {/* KPI Cards */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
                 {[
-                  { label: "Modelli Analizzati", value: "7", color: "blue" },
-                  { label: "LTV Range", value: "€18-120", color: "emerald" },
-                  { label: "Break-even Minimo", value: "1 mese", color: "amber" },
-                  { label: "LTV/CAC Max", value: "79,8x", color: "pink" },
+                  { label: "Modello Scelto", value: "Ibrido", color: "blue" },
+                  { label: "Break-even", value: "Mese 8-9", color: "emerald" },
+                  { label: "LTV/CAC", value: "6,75x", color: "amber" },
+                  { label: "ROI 36m", value: "83-225x", color: "pink" },
                 ].map((kpi, i) => (
                   <div key={i} className={`bg-slate-800/80 border rounded-xl p-4 ${
                     kpi.color === "emerald" ? "border-emerald-500/30 glow-green" :
@@ -467,13 +343,11 @@ export default function Home() {
 
               {/* Executive Summary */}
               <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6 max-w-3xl">
-                <div className="text-xs font-mono text-slate-500 uppercase tracking-widest mb-3">Analisi Completa</div>
+                <div className="text-xs font-mono text-slate-500 uppercase tracking-widest mb-3">Responso Finale</div>
                 <p className="text-slate-300 leading-relaxed text-sm">
-                  Questa analisi testa 7 modelli di business alternativi per Lavoroinchiaro.it,
-                  dal freemium puro al pay-per-error, dall'abbonamento ultra-low-cost (€0,99/mese) al modello Pro con chatbot AI specializzato
-                  in diritto del lavoro. Per ogni modello: unit economics completi (LTV, CAC, ratio, break-even),
-                  timeline di lancio (MVP, launch, break-even), strategie di retention, e metriche di scalabilità.
-                  L'obiettivo è identificare il modello più sostenibile che combina acquisizione rapida, retention alta, e LTV robusto.
+                  <strong className="text-emerald-400">✓ INVESTIBILE</strong> — Pre-Seed €300-500K con modello Ibrido ottimizzato verso Ultra-Low.
+                  Break-even realistico in mese 8-9, profittabilità sostenibile, upside massivo con espansione europea.
+                  Rischi gestibili con execution corretta. ROI atteso 83-225x in 36 mesi.
                 </p>
               </div>
             </div>
@@ -482,14 +356,96 @@ export default function Home() {
           <div className="px-6 md:px-10 space-y-20 pb-20">
 
             {/* ═══════════════════════════════════════════════════════════
-                1. COMPARAZIONE MODELLI
+                1. IL PROBLEMA
             ═══════════════════════════════════════════════════════════ */}
-            <section id="models-comparison">
+            <section id="problema">
               <SectionHeader
                 number="Sezione 01"
-                title="Comparazione dei 7 Modelli"
-                subtitle="Seleziona i modelli da confrontare. Ogni modello ha pricing, LTV, CAC, e timeline diversi."
-                verdict={{ label: "Tutti gli Scenari", type: "positive" }}
+                title="Il Problema Reale"
+                subtitle="16 milioni di dipendenti italiani che non controllano mai i loro cedolini"
+                verdict={{ label: "Problema Verificato", type: "positive" }}
+              />
+
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
+                  <h3 className="font-semibold text-white text-sm mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                    Costi Attuali per Verificare un Cedolino
+                  </h3>
+                  <div className="space-y-3">
+                    {[
+                      { option: "Sindacato", cost: "€15-25/mese", time: "Giorni", barrier: "Presenza fisica" },
+                      { option: "CAF Online", cost: "€39,99", time: "5 giorni", barrier: "Documenti" },
+                      { option: "Consulente", cost: "€50-150/ora", time: "Variabile", barrier: "Costo elevato" },
+                      { option: "ChatGPT DIY", cost: "Gratis", time: "Istantaneo", barrier: "Rischio legale" },
+                    ].map((item, i) => (
+                      <div key={i} className="border-l-2 border-blue-500/30 pl-4">
+                        <div className="flex justify-between items-start mb-1">
+                          <span className="font-semibold text-xs text-white">{item.option}</span>
+                          <span className="font-mono text-xs text-blue-400">{item.cost}</span>
+                        </div>
+                        <p className="text-xs text-slate-400">{item.time} | {item.barrier}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
+                  <h3 className="font-semibold text-white text-sm mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                    Perché Lavoroinchiaro Risolve
+                  </h3>
+                  <div className="space-y-2">
+                    {[
+                      { feature: "8-10x più economico", value: "€0,99 vs €39,99" },
+                      { feature: "Istantaneo", value: "vs 5 giorni CAF" },
+                      { feature: "Autonomia digitale", value: "vs presenza fisica" },
+                      { feature: "Accuratezza legale", value: "vs DIY ChatGPT" },
+                      { feature: "Ricorrente", value: "12 cedolini/anno" },
+                    ].map((item, i) => (
+                      <div key={i} className="flex justify-between items-center text-xs">
+                        <span className="text-slate-400">✓ {item.feature}</span>
+                        <span className="font-mono text-emerald-400 font-bold">{item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
+                <h3 className="text-sm font-semibold text-slate-300 mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  TAM Italiano
+                </h3>
+                <div className="grid grid-cols-3 gap-4">
+                  {[
+                    { label: "Occupati Italia", value: "24,2M", color: "blue" },
+                    { label: "Dipendenti", value: "16M", color: "emerald" },
+                    { label: "TAM Potenziale", value: "€2,4M/anno", color: "amber" },
+                  ].map((item, i) => (
+                    <div key={i} className={`bg-slate-700/40 rounded-lg p-4 border-l-2 ${
+                      item.color === "emerald" ? "border-emerald-500" :
+                      item.color === "amber" ? "border-amber-500" : "border-blue-500"
+                    }`}>
+                      <div className="text-xs text-slate-400 mb-1">{item.label}</div>
+                      <div className={`text-lg font-bold font-mono ${
+                        item.color === "emerald" ? "text-emerald-400" :
+                        item.color === "amber" ? "text-amber-400" : "text-blue-400"
+                      }`}>
+                        {item.value}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════
+                2. MODELLI DI BUSINESS
+            ═══════════════════════════════════════════════════════════ */}
+            <section id="modelli">
+              <SectionHeader
+                number="Sezione 02"
+                title="7 Modelli di Business Testati"
+                subtitle="Comparazione LTV, CAC, ratio, e verdict per ogni modello"
+                verdict={{ label: "Analisi Completa", type: "neutral" }}
               />
 
               {/* Model selector */}
@@ -508,37 +464,28 @@ export default function Home() {
                       backgroundColor: selectedModels.includes(model.id) ? `${model.color}15` : "transparent"
                     }}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-sm" style={{ color: model.color, fontFamily: "'Space Grotesk', sans-serif" }}>
-                        {model.name}
-                      </h3>
-                      <input
-                        type="checkbox"
-                        checked={selectedModels.includes(model.id)}
-                        onChange={() => toggleModel(model.id)}
-                        className="w-4 h-4 rounded"
-                      />
-                    </div>
-                    <p className="text-xs text-slate-400 mb-2">{model.subtitle}</p>
+                    <h3 className="font-semibold text-sm mb-2" style={{ color: model.color, fontFamily: "'Space Grotesk', sans-serif" }}>
+                      {model.name}
+                    </h3>
+                    <div className="text-xs text-slate-400 mb-2">{model.verdict}</div>
                     <div className="text-xs font-mono" style={{ color: model.color }}>
-                      LTV: €{model.ltv.toFixed(2)}
+                      LTV: €{model.ltv.toFixed(2)} | Ratio: {model.ratio.toFixed(2)}x
                     </div>
                   </button>
                 ))}
               </div>
 
               {/* Comparison table */}
-              <div className="bg-slate-800/60 border border-white/10 rounded-xl overflow-hidden mb-6">
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-white/10">
                         <th className="text-left px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Modello</th>
-                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Pricing</th>
                         <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">LTV</th>
                         <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">CAC</th>
                         <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Ratio</th>
-                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Break-even</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Verdict</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -546,9 +493,6 @@ export default function Home() {
                         <tr key={i} className="border-b border-white/5 hover:bg-white/3 transition-colors">
                           <td className="px-5 py-3 font-medium text-xs" style={{ color: model.color }}>
                             {model.name}
-                          </td>
-                          <td className="px-5 py-3 text-slate-400 text-xs text-center font-mono">
-                            {model.pricing.paid}
                           </td>
                           <td className="px-5 py-3 font-mono text-xs text-center" style={{ color: model.color }}>
                             €{model.ltv.toFixed(2)}
@@ -559,8 +503,8 @@ export default function Home() {
                           <td className="px-5 py-3 font-mono text-xs text-center" style={{ color: model.ratio > 3 ? "#10B981" : model.ratio > 2 ? "#F59E0B" : "#EF4444" }}>
                             {model.ratio.toFixed(2)}x
                           </td>
-                          <td className="px-5 py-3 font-mono text-xs text-center text-slate-400">
-                            {model.breakeven_months} mesi
+                          <td className="px-5 py-3 font-mono text-xs text-center" style={{ color: model.color }}>
+                            {model.verdict}
                           </td>
                         </tr>
                       ))}
@@ -568,472 +512,182 @@ export default function Home() {
                   </table>
                 </div>
               </div>
-
-              {/* Radar comparison */}
-              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
-                <h3 className="text-sm font-semibold text-slate-300 mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                  Profilo dei Modelli Selezionati
-                </h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {selectedModelsData.slice(0, 2).map((model) => (
-                    <div key={model.id} className="bg-slate-700/40 rounded-lg p-4">
-                      <h4 className="font-semibold text-sm mb-3" style={{ color: model.color, fontFamily: "'Space Grotesk', sans-serif" }}>
-                        {model.name}
-                      </h4>
-                      <div className="space-y-2">
-                        {[
-                          { label: "LTV/CAC Ratio", value: model.ratio.toFixed(2) + "x", ok: model.ratio > 3 },
-                          { label: "Break-even", value: model.breakeven_months + " mesi", ok: model.breakeven_months < 6 },
-                          { label: "Churn Mensile", value: (model.churn_monthly * 100).toFixed(1) + "%", ok: model.churn_monthly < 0.08 },
-                          { label: "Retention Paganti", value: (model.retention_paid * 100).toFixed(0) + "%", ok: model.retention_paid > 0.90 },
-                          { label: "Year 3 Revenue", value: "€" + (model.year3_revenue / 1000).toFixed(0) + "K", ok: model.year3_revenue > 500000 },
-                        ].map((metric, i) => (
-                          <div key={i} className="flex justify-between items-center text-xs">
-                            <span className="text-slate-400">{metric.label}</span>
-                            <span className={`font-mono font-bold ${metric.ok ? "text-emerald-400" : "text-amber-400"}`}>
-                              {metric.value}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </section>
 
             {/* ═══════════════════════════════════════════════════════════
-                2. UNIT ECONOMICS DETTAGLIATI
+                3. MODELLO SCELTO
             ═══════════════════════════════════════════════════════════ */}
-            <section id="unit-economics">
-              <SectionHeader
-                number="Sezione 02"
-                title="Unit Economics Dettagliati"
-                subtitle="LTV, CAC, ratio, break-even, churn, retention per ogni modello"
-                verdict={{ label: "Analisi Completa", type: "neutral" }}
-              />
-
-              <div className="grid md:grid-cols-2 gap-6 mb-8">
-                {selectedModelsData.slice(0, 2).map((model) => (
-                  <div key={model.id} className="bg-slate-800/60 border border-white/10 rounded-xl p-6" style={{ borderTopColor: model.color, borderTopWidth: 2 }}>
-                    <h3 className="font-semibold text-white text-sm mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif", color: model.color }}>
-                      {model.name}
-                    </h3>
-
-                    <div className="space-y-4">
-                      {[
-                        { label: "Prezzo Medio", value: model.pricing.paid, color: model.color },
-                        { label: "LTV (Lifetime Value)", value: "€" + model.ltv.toFixed(2), color: model.color, note: "Valore totale generato da un cliente" },
-                        { label: "CAC (Customer Acquisition Cost)", value: "€" + model.cac.toFixed(2), color: "slate", note: "Costo medio per acquisire un cliente" },
-                        { label: "LTV/CAC Ratio", value: model.ratio.toFixed(2) + "x", color: model.ratio > 3 ? "emerald" : model.ratio > 2 ? "amber" : "red", note: "Soglia sostenibilità: 3x" },
-                        { label: "Break-even Mesi", value: model.breakeven_months + " mesi", color: model.breakeven_months < 6 ? "emerald" : "amber", note: "Quando il cliente ripaga il CAC" },
-                        { label: "Churn Mensile", value: (model.churn_monthly * 100).toFixed(1) + "%", color: "slate", note: "% clienti che cancellano ogni mese" },
-                        { label: "Retention Paganti", value: (model.retention_paid * 100).toFixed(0) + "%", color: "slate", note: "% clienti che rimangono" },
-                        { label: "Conv. Free→Paid", value: (model.conversion_free_to_paid * 100).toFixed(0) + "%", color: "slate", note: "Conversion rate dal free al paid" },
-                      ].map((metric, i) => (
-                        <div key={i} className="border-t border-white/5 pt-3 first:border-0 first:pt-0">
-                          <div className="flex justify-between items-start mb-1">
-                            <span className="text-xs text-slate-500">{metric.label}</span>
-                            <span className="font-mono font-bold text-sm" style={{ color: metric.color === "slate" ? "#94A3B8" : metric.color === "emerald" ? "#10B981" : metric.color === "amber" ? "#F59E0B" : metric.color === "red" ? "#EF4444" : metric.color }}>
-                              {metric.value}
-                            </span>
-                          </div>
-                          {metric.note && <p className="text-xs text-slate-600">{metric.note}</p>}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Year 3 Revenue Comparison */}
-              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
-                <h3 className="text-sm font-semibold text-slate-300 mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                  Revenue Proiettato — Anno 3
-                </h3>
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={selectedModelsData.map(m => ({
-                      name: m.name,
-                      revenue: m.year3_revenue,
-                      color: m.color
-                    }))}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
-                      <XAxis dataKey="name" tick={{ fill: "#94A3B8", fontSize: 10 }} />
-                      <YAxis tick={{ fill: "#64748B", fontSize: 11 }} tickFormatter={(v) => `€${(v / 1000).toFixed(0)}K`} />
-                      <Tooltip content={<CustomTooltip prefix="€" suffix="" />} />
-                      <Bar dataKey="revenue" radius={[3, 3, 0, 0]}>
-                        {selectedModelsData.map((m, i) => (
-                          <Cell key={i} fill={m.color} />
-                        ))}
-                      </Bar>
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </section>
-
-            {/* ═══════════════════════════════════════════════════════════
-                3. TIMELINE DI LANCIO
-            ═══════════════════════════════════════════════════════════ */}
-            <section id="timeline">
+            <section id="scelto">
               <SectionHeader
                 number="Sezione 03"
-                title="Timeline di Lancio"
-                subtitle="MVP → Launch → Break-even per ogni modello"
-                verdict={{ label: "Tempi Realistici", type: "info" }}
-              />
-
-              <div className="grid md:grid-cols-2 gap-4 mb-8">
-                {selectedModelsData.slice(0, 2).map((model) => (
-                  <div key={model.id} className="bg-slate-800/60 border border-white/10 rounded-xl p-5" style={{ borderLeftColor: model.color, borderLeftWidth: 3 }}>
-                    <h3 className="font-semibold text-white text-sm mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                      {model.name}
-                    </h3>
-
-                    <div className="space-y-3">
-                      {[
-                        { phase: "MVP", months: model.timeline.mvp, desc: "Prototipo funzionante con 5 CCNL" },
-                        { phase: "Launch", months: model.timeline.launch, desc: "Prodotto live con marketing iniziale" },
-                        { phase: "Break-even", months: model.timeline.breakeven, desc: "Profittabilità raggiunta" },
-                      ].map((phase, i) => (
-                        <div key={i} className="flex gap-3">
-                          <div className="flex flex-col items-center">
-                            <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: `${model.color}30`, color: model.color }}>
-                              {i + 1}
-                            </div>
-                            {i < 2 && <div className="w-0.5 h-8 bg-white/10 mt-1" />}
-                          </div>
-                          <div className="flex-1 pb-2">
-                            <div className="flex items-center gap-2 mb-0.5">
-                              <span className="font-semibold text-sm text-white">{phase.phase}</span>
-                              <span className="font-mono text-xs px-2 py-0.5 rounded" style={{ background: `${model.color}20`, color: model.color }}>
-                                +{phase.months}m
-                              </span>
-                            </div>
-                            <p className="text-xs text-slate-400">{phase.desc}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="mt-4 pt-4 border-t border-white/10">
-                      <div className="text-xs">
-                        <span className="text-slate-500">Tempo totale a break-even: </span>
-                        <span className="font-mono font-bold" style={{ color: model.color }}>
-                          {model.timeline.breakeven} mesi ({Math.round(model.timeline.breakeven / 12 * 10) / 10} anni)
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Timeline comparison chart */}
-              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
-                <h3 className="text-sm font-semibold text-slate-300 mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                  Confronto Timeline (mesi)
-                </h3>
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={selectedModelsData.map(m => ({
-                      name: m.name,
-                      MVP: m.timeline.mvp,
-                      Launch: m.timeline.launch - m.timeline.mvp,
-                      "Break-even": m.timeline.breakeven - m.timeline.launch,
-                    }))}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
-                      <XAxis dataKey="name" tick={{ fill: "#94A3B8", fontSize: 10 }} />
-                      <YAxis tick={{ fill: "#64748B", fontSize: 11 }} />
-                      <Tooltip content={<CustomTooltip suffix=" mesi" />} />
-                      <Legend wrapperStyle={{ color: "#94A3B8", fontSize: 11 }} />
-                      <Bar dataKey="MVP" stackId="a" fill="#3B82F6" radius={[3, 3, 0, 0]} />
-                      <Bar dataKey="Launch" stackId="a" fill="#818CF8" />
-                      <Bar dataKey="Break-even" stackId="a" fill="#10B981" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </section>
-
-            {/* ═══════════════════════════════════════════════════════════
-                4. STRATEGIE DI RETENTION
-            ═══════════════════════════════════════════════════════════ */}
-            <section id="retention">
-              <SectionHeader
-                number="Sezione 04"
-                title="Strategie di Retention per Ogni Modello"
-                subtitle="Come mantenere i clienti e ridurre il churn"
-                verdict={{ label: "Strategie Specifiche", type: "positive" }}
-              />
-
-              <div className="grid md:grid-cols-2 gap-4">
-                {selectedModelsData.map((model) => (
-                  <div key={model.id} className="bg-slate-800/60 border border-white/10 rounded-xl p-5" style={{ borderTopColor: model.color, borderTopWidth: 2 }}>
-                    <h3 className="font-semibold text-white text-sm mb-3" style={{ fontFamily: "'Space Grotesk', sans-serif", color: model.color }}>
-                      {model.name}
-                    </h3>
-
-                    <div className="space-y-2 mb-4">
-                      <div className="text-xs">
-                        <span className="text-slate-500">Churn target: </span>
-                        <span className="font-mono font-bold text-slate-300">{(model.churn_monthly * 100).toFixed(1)}%/mese</span>
-                      </div>
-                      <div className="text-xs">
-                        <span className="text-slate-500">Retention target: </span>
-                        <span className="font-mono font-bold text-emerald-400">{(model.retention_paid * 100).toFixed(0)}%</span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      {model.id === "model-1" && (
-                        <>
-                          <p className="text-xs text-slate-400">• Email alert anomalie rilevate</p>
-                          <p className="text-xs text-slate-400">• Notifiche push: "Controlla il tuo cedolino"</p>
-                          <p className="text-xs text-slate-400">• Referral program: invita amici, sconto 20%</p>
-                          <p className="text-xs text-slate-400">• Upsell a €4,99 dopo 3 analisi free</p>
-                        </>
-                      )}
-                      {model.id === "model-2" && (
-                        <>
-                          <p className="text-xs text-slate-400">• Notifiche instant quando anomalia rilevata</p>
-                          <p className="text-xs text-slate-400">• Storico anomalie per tracking</p>
-                          <p className="text-xs text-slate-400">• Upsell a abbonamento dopo 5 anomalie</p>
-                          <p className="text-xs text-slate-400">• Community forum: condividi esperienze</p>
-                        </>
-                      )}
-                      {model.id === "model-3" && (
-                        <>
-                          <p className="text-xs text-slate-400">• Alert mensile: "Controlla il tuo cedolino"</p>
-                          <p className="text-xs text-slate-400">• Storico 3 anni di cedolini</p>
-                          <p className="text-xs text-slate-400">• Chatbot 24/7 per domande CCNL</p>
-                          <p className="text-xs text-slate-400">• Upsell a Pro con chatbot avanzato</p>
-                        </>
-                      )}
-                      {model.id === "model-4" && (
-                        <>
-                          <p className="text-xs text-slate-400">• Alert automatici anomalie mensili</p>
-                          <p className="text-xs text-slate-400">• Report PDF scaricabile</p>
-                          <p className="text-xs text-slate-400">• Supporto email prioritario</p>
-                          <p className="text-xs text-slate-400">• Upsell a Pro con chatbot</p>
-                        </>
-                      )}
-                      {model.id === "model-5" && (
-                        <>
-                          <p className="text-xs text-slate-400">• Chatbot diritto del lavoro 24/7</p>
-                          <p className="text-xs text-slate-400">• Alert anomalie + consulenza</p>
-                          <p className="text-xs text-slate-400">• Community VIP con esperti</p>
-                          <p className="text-xs text-slate-400">• Webinar mensili CCNL</p>
-                        </>
-                      )}
-                      {model.id === "model-6" && (
-                        <>
-                          <p className="text-xs text-slate-400">• Multi-tier: upgrade naturale</p>
-                          <p className="text-xs text-slate-400">• Alert anomalie per tutti</p>
-                          <p className="text-xs text-slate-400">• Chatbot per Pro users</p>
-                          <p className="text-xs text-slate-400">• Gamification: badge per attività</p>
-                        </>
-                      )}
-                      {model.id === "model-7" && (
-                        <>
-                          <p className="text-xs text-slate-400">• Partnership CAF: supporto offline</p>
-                          <p className="text-xs text-slate-400">• Integrazione con app CAF</p>
-                          <p className="text-xs text-slate-400">• Alert anomalie + consulenza CAF</p>
-                          <p className="text-xs text-slate-400">• Loyalty program CAF</p>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* ═══════════════════════════════════════════════════════════
-                5. CHATBOT DIRITTO DEL LAVORO
-            ═══════════════════════════════════════════════════════════ */}
-            <section id="chatbot">
-              <SectionHeader
-                number="Sezione 05"
-                title="Chatbot Specializzato in Diritto del Lavoro"
-                subtitle="Componente chiave per i modelli Pro e Ibrido"
-                verdict={{ label: "Feature Differenziante", type: "premium" }}
+                title="Modello Scelto: IBRIDO Ottimizzato verso Ultra-Low"
+                subtitle="Pricing: Free + Pay-Per €3,99 + Abbonamento €0,99/mese + Pro €9,99/mese"
+                verdict={{ label: "Ottimale", type: "positive" }}
               />
 
               <div className="grid md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
-                  <h3 className="font-semibold text-white text-sm mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                    Architettura del Chatbot
+                <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6" style={{ borderTopColor: "#06B6D4", borderTopWidth: 2 }}>
+                  <h3 className="font-semibold text-white text-sm mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#06B6D4" }}>
+                    Perché il Modello Ibrido?
                   </h3>
                   <div className="space-y-3">
                     {[
-                      { phase: "1. Knowledge Base", desc: "900+ CCNL + normativa lavoro italiana + giurisprudenza", cost: "€20K" },
-                      { phase: "2. LLM Fine-tuning", desc: "GPT-4 specializzato su diritto del lavoro", cost: "€15K" },
-                      { phase: "3. Retrieval Augmented Generation", desc: "Accesso real-time a CCNL e normativa", cost: "€10K" },
-                      { phase: "4. Validation Layer", desc: "Risposta verificate da consulenti del lavoro", cost: "€25K" },
-                      { phase: "5. Integration", desc: "Integrazione con piattaforma Lavoroinchiaro", cost: "€10K" },
+                      "Flessibilità massima — Cattura tutti i segmenti",
+                      "Monetizzazione multipla — Free + Pay-Per + Abbonamento + Pro",
+                      "LTV/CAC sostenibile — 6,75x è il sweet spot",
+                      "Break-even realistico — 8-9 mesi è fattibile",
+                      "Scalabilità — Transizione naturale verso Ultra-Low"
+                    ].map((reason, i) => (
+                      <div key={i} className="flex items-start gap-2 text-xs">
+                        <span className="text-emerald-400 mt-0.5">✓</span>
+                        <span className="text-slate-400">{reason}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6" style={{ borderTopColor: "#06B6D4", borderTopWidth: 2 }}>
+                  <h3 className="font-semibold text-white text-sm mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif", color: "#06B6D4" }}>
+                    Strategia di Transizione
+                  </h3>
+                  <div className="space-y-3">
+                    {[
+                      { phase: "Fase 1 (1-6m)", desc: "Lancio Ibrido conservativo" },
+                      { phase: "Fase 2 (7-12m)", desc: "Introdurre €0,99/mese illimitato" },
+                      { phase: "Fase 3 (13-24m)", desc: "Scale Ultra-Low + Chatbot completo" },
                     ].map((item, i) => (
-                      <div key={i} className="border-l-2 border-pink-500/30 pl-4">
-                        <div className="flex justify-between items-start mb-1">
-                          <span className="font-semibold text-xs text-white">{item.phase}</span>
-                          <span className="font-mono text-xs text-pink-400">{item.cost}</span>
-                        </div>
+                      <div key={i} className="border-l-2 border-cyan-500/30 pl-4">
+                        <div className="font-semibold text-xs text-white mb-1" style={{ color: "#06B6D4" }}>{item.phase}</div>
                         <p className="text-xs text-slate-400">{item.desc}</p>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-4 pt-4 border-t border-white/10">
-                    <div className="text-xs">
-                      <span className="text-slate-500">Costo totale sviluppo: </span>
-                      <span className="font-mono font-bold text-pink-400">€80K</span>
-                    </div>
-                    <div className="text-xs text-slate-600 mt-1">Timeline: 4-6 mesi</div>
-                  </div>
-                </div>
-
-                <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
-                  <h3 className="font-semibold text-white text-sm mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                    Capacità del Chatbot
-                  </h3>
-                  <div className="space-y-2">
-                    {[
-                      { q: "Qual è lo scatto di anzianità nel mio CCNL?", ok: true },
-                      { q: "Mi spetta la tredicesima? Quando?", ok: true },
-                      { q: "Posso rifiutare il lavoro straordinario?", ok: true },
-                      { q: "Qual è il mio diritto a ferie e permessi?", ok: true },
-                      { q: "Come calcolare il TFR?", ok: true },
-                      { q: "Cosa fare se il cedolino è errato?", ok: true },
-                      { q: "Posso fare causa al mio datore?", ok: false },
-                      { q: "Mi serve un avvocato?", ok: false },
-                    ].map((item, i) => (
-                      <div key={i} className="flex items-start gap-2 text-xs">
-                        <span className={item.ok ? "text-emerald-400" : "text-slate-500"}>{item.ok ? "✓" : "—"}</span>
-                        <span className="text-slate-400">{item.q}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-white/10">
-                    <p className="text-xs text-slate-500">
-                      <strong className="text-slate-400">Disclaimer:</strong> Il chatbot fornisce informazioni generali,
-                      non consulenza legale. Per questioni legali complesse, consiglia di contattare un consulente del lavoro.
-                    </p>
-                  </div>
                 </div>
               </div>
+            </section>
 
-              {/* Chatbot cost per model */}
-              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
+            {/* ═══════════════════════════════════════════════════════════
+                4. PROIEZIONI FINANZIARIE
+            ═══════════════════════════════════════════════════════════ */}
+            <section id="proiezioni">
+              <SectionHeader
+                number="Sezione 04"
+                title="Proiezioni Finanziarie 3-36 Mesi"
+                subtitle="Scenario realistico: ricavi, costi, EBITDA, break-even"
+                verdict={{ label: "Numeri Verificabili", type: "positive" }}
+              />
+
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6 mb-8">
                 <h3 className="text-sm font-semibold text-slate-300 mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                  Costo Operativo del Chatbot per Utente (€/mese)
+                  Revenue, Costi, EBITDA (€K)
                 </h3>
                 <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={[
-                      { name: "Freemium Puro", cost: 0, color: "#3B82F6" },
-                      { name: "Pay-Per-Error", cost: 0, color: "#818CF8" },
-                      { name: "Ultra-Low €0,99", cost: 0, color: "#10B981" },
-                      { name: "Freemium Annual", cost: 0, color: "#F59E0B" },
-                      { name: "Pro + Chatbot", cost: 1.50, color: "#EC4899" },
-                      { name: "Ibrido", cost: 0.75, color: "#06B6D4" },
-                      { name: "B2B2C", cost: 0.50, color: "#8B5CF6" },
-                    ]}>
+                    <AreaChart data={financialProjections}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
-                      <XAxis dataKey="name" tick={{ fill: "#94A3B8", fontSize: 9 }} />
-                      <YAxis tick={{ fill: "#64748B", fontSize: 11 }} tickFormatter={(v) => `€${v.toFixed(2)}`} />
-                      <Tooltip formatter={(v: any) => `€${v.toFixed(2)}`} contentStyle={{ background: "#1E293B", border: "1px solid #334155" }} />
-                      <Bar dataKey="cost" radius={[3, 3, 0, 0]}>
-                        {[
-                          { color: "#3B82F6" }, { color: "#818CF8" }, { color: "#10B981" },
-                          { color: "#F59E0B" }, { color: "#EC4899" }, { color: "#06B6D4" },
-                          { color: "#8B5CF6" }
-                        ].map((entry, index) => (
-                          <Cell key={index} fill={entry.color} />
-                        ))}
-                      </Bar>
+                      <XAxis dataKey="month" tick={{ fill: "#94A3B8", fontSize: 10 }} />
+                      <YAxis tick={{ fill: "#64748B", fontSize: 11 }} tickFormatter={(v) => `€${v}K`} />
+                      <Tooltip content={<CustomTooltip suffix="K" />} />
+                      <Legend wrapperStyle={{ color: "#94A3B8", fontSize: 11 }} />
+                      <Area type="monotone" dataKey="revenue" stroke="#10B981" fill="#10B981" fillOpacity={0.2} name="Revenue" />
+                      <Area type="monotone" dataKey="costs" stroke="#EF4444" fill="#EF4444" fillOpacity={0.2} name="Costi" />
+                      <Area type="monotone" dataKey="ebitda" stroke="#3B82F6" fill="#3B82F6" fillOpacity={0.2} name="EBITDA" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Tabella proiezioni */}
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-white/10">
+                        <th className="text-left px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Metrica</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">M3</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">M6</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">M12</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">M24</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">M36</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { metric: "Ricavi (€K)", key: "revenue", color: "#10B981" },
+                        { metric: "Costi (€K)", key: "costs", color: "#EF4444" },
+                        { metric: "EBITDA (€K)", key: "ebitda", color: "#3B82F6" },
+                        { metric: "Utenti (K)", key: "users", color: "#F59E0B" },
+                      ].map((row, i) => (
+                        <tr key={i} className="border-b border-white/5">
+                          <td className="px-5 py-3 font-medium text-xs text-slate-300">{row.metric}</td>
+                          {[0, 1, 3, 5, 6].map((idx) => (
+                            <td key={idx} className="px-5 py-3 font-mono text-xs text-center" style={{ color: row.color }}>
+                              {(financialProjections[idx][row.key as keyof typeof financialProjections[0]] as number).toFixed(0)}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="mt-6 bg-slate-800/60 border border-white/10 rounded-xl p-6">
+                <div className="text-xs text-slate-400 leading-relaxed">
+                  <strong className="text-slate-300">Break-even operativo:</strong> Mese 8-9<br />
+                  <strong className="text-slate-300">Profittabilità positiva:</strong> Mese 10+<br />
+                  <strong className="text-slate-300">ROI positivo (seed €400K):</strong> Mese 16-18<br />
+                  <strong className="text-slate-300">Margine EBITDA anno 3:</strong> 63% (€3,5M su €5,55M revenue)
+                </div>
+              </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════
+                5. ESPANSIONE EUROPEA
+            ═══════════════════════════════════════════════════════════ */}
+            <section id="eu-expansion">
+              <SectionHeader
+                number="Sezione 05"
+                title="Strategia di Espansione in Europa"
+                subtitle="TAM europeo €13M+ in 5 paesi: Francia, Germania, Spagna, Paesi Bassi"
+                verdict={{ label: "Upside Massivo", type: "positive" }}
+              />
+
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6 mb-8">
+                <h3 className="text-sm font-semibold text-slate-300 mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  TAM Europeo per Paese (Anno 3)
+                </h3>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={euExpansion}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
+                      <XAxis dataKey="country" tick={{ fill: "#94A3B8", fontSize: 10 }} />
+                      <YAxis yAxisId="left" tick={{ fill: "#64748B", fontSize: 11 }} tickFormatter={(v) => `€${v}M`} />
+                      <YAxis yAxisId="right" orientation="right" tick={{ fill: "#64748B", fontSize: 11 }} tickFormatter={(v) => `${v}K utenti`} />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Legend wrapperStyle={{ color: "#94A3B8", fontSize: 11 }} />
+                      <Bar yAxisId="left" dataKey="revenue_y3" fill="#3B82F6" name="Revenue (€M)" />
+                      <Bar yAxisId="right" dataKey="users_y3" fill="#10B981" name="Utenti (K)" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </div>
-            </section>
 
-            {/* ═══════════════════════════════════════════════════════════
-                6. SIMULATORE DI PRICING
-            ═══════════════════════════════════════════════════════════ */}
-            <section id="pricing-simulator">
-              <SectionHeader
-                number="Sezione 06"
-                title="Simulatore di Pricing Interattivo"
-                subtitle="Modifica i parametri e vedi come cambiano LTV, CAC, ratio e break-even"
-                verdict={{ label: "Strumento Interattivo", type: "info" }}
-              />
-
-              <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
                   <h3 className="font-semibold text-white text-sm mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                    Parametri Simulazione
+                    Timeline di Lancio
                   </h3>
-
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {[
-                      {
-                        label: "CAC (€)",
-                        key: "cac",
-                        min: 3,
-                        max: 20,
-                        step: 1,
-                        note: "Costo per acquisire un cliente"
-                      },
-                      {
-                        label: "Conversion Free→Paid (%)",
-                        key: "conversion",
-                        min: 0.05,
-                        max: 0.50,
-                        step: 0.05,
-                        note: "% di free users che convertono a paid"
-                      },
-                      {
-                        label: "Churn Mensile (%)",
-                        key: "churn",
-                        min: 0.02,
-                        max: 0.15,
-                        step: 0.01,
-                        note: "% di clienti che cancellano ogni mese"
-                      },
-                      {
-                        label: "Prezzo Medio (€/mese)",
-                        key: "price",
-                        min: 0.99,
-                        max: 9.99,
-                        step: 0.99,
-                        note: "Prezzo medio per utente pagante"
-                      }
-                    ].map((param) => (
-                      <div key={param.key}>
-                        <div className="flex justify-between items-center mb-2">
-                          <label className="text-xs font-semibold text-white">{param.label}</label>
-                          <span className="font-mono text-sm font-bold text-blue-400">
-                            {param.key === "conversion" || param.key === "churn"
-                              ? (simulatorInputs[param.key as keyof typeof simulatorInputs] * 100).toFixed(1) + "%"
-                              : "€" + (simulatorInputs[param.key as keyof typeof simulatorInputs] as number).toFixed(2)}
-                          </span>
-                        </div>
-                        <input
-                          type="range"
-                          min={param.min}
-                          max={param.max}
-                          step={param.step}
-                          value={simulatorInputs[param.key as keyof typeof simulatorInputs]}
-                          onChange={(e) => setSimulatorInputs({
-                            ...simulatorInputs,
-                            [param.key]: param.key === "conversion" || param.key === "churn"
-                              ? parseFloat(e.target.value)
-                              : parseFloat(e.target.value)
-                          })}
-                          className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer"
-                          style={{
-                            background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${((simulatorInputs[param.key as keyof typeof simulatorInputs] as number - param.min) / (param.max - param.min)) * 100}%, #334155 ${((simulatorInputs[param.key as keyof typeof simulatorInputs] as number - param.min) / (param.max - param.min)) * 100}%, #334155 100%)`
-                          }}
-                        />
-                        <p className="text-xs text-slate-600 mt-1">{param.note}</p>
+                      { country: "Francia", launch: "Mese 13-14", investment: "€80K", target: "20K utenti" },
+                      { country: "Germania", launch: "Mese 15-16", investment: "€100K", target: "30K utenti" },
+                      { country: "Spagna", launch: "Mese 17-18", investment: "€70K", target: "15K utenti" },
+                      { country: "Paesi Bassi", launch: "Mese 19-20", investment: "€60K", target: "10K utenti" },
+                    ].map((item, i) => (
+                      <div key={i} className="border-l-2 border-purple-500/30 pl-4">
+                        <div className="font-semibold text-xs text-white mb-1">{item.country}</div>
+                        <p className="text-xs text-slate-400">{item.launch} | {item.investment} | {item.target}</p>
                       </div>
                     ))}
                   </div>
@@ -1041,265 +695,160 @@ export default function Home() {
 
                 <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6">
                   <h3 className="font-semibold text-white text-sm mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                    Risultati Simulazione
+                    Partnership Strategy
                   </h3>
-
-                  <div className="space-y-3">
-                    {[
-                      {
-                        label: "LTV (Lifetime Value)",
-                        value: "€" + simulatedMetrics.ltv.toFixed(2),
-                        color: "#3B82F6",
-                        note: "Valore totale generato da un cliente"
-                      },
-                      {
-                        label: "CAC (Customer Acquisition Cost)",
-                        value: "€" + simulatedMetrics.cac.toFixed(2),
-                        color: "#64748B",
-                        note: "Costo per acquisire un cliente"
-                      },
-                      {
-                        label: "LTV/CAC Ratio",
-                        value: simulatedMetrics.ratio.toFixed(2) + "x",
-                        color: simulatedMetrics.ratio > 3 ? "#10B981" : simulatedMetrics.ratio > 2 ? "#F59E0B" : "#EF4444",
-                        note: "Soglia sostenibilità: 3x"
-                      },
-                      {
-                        label: "Break-even (mesi)",
-                        value: simulatedMetrics.breakeven + " mesi",
-                        color: simulatedMetrics.breakeven < 6 ? "#10B981" : simulatedMetrics.breakeven < 12 ? "#F59E0B" : "#EF4444",
-                        note: "Quando il cliente ripaga il CAC"
-                      }
-                    ].map((metric, i) => (
-                      <div key={i} className="bg-slate-700/40 rounded-lg p-4 border-l-2" style={{ borderLeftColor: metric.color }}>
-                        <div className="flex justify-between items-start mb-1">
-                          <span className="text-xs text-slate-400">{metric.label}</span>
-                          <span className="font-mono font-bold text-lg" style={{ color: metric.color }}>
-                            {metric.value}
-                          </span>
-                        </div>
-                        <p className="text-xs text-slate-600">{metric.note}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-4 pt-4 border-t border-white/10">
-                    <div className="text-xs">
-                      <span className="text-slate-500">Verdict: </span>
-                      <span className={`font-semibold ${
-                        simulatedMetrics.ratio > 3 ? "text-emerald-400" :
-                        simulatedMetrics.ratio > 2 ? "text-amber-400" : "text-red-400"
-                      }`}>
-                        {simulatedMetrics.ratio > 3 ? "✓ Sostenibile" :
-                         simulatedMetrics.ratio > 2 ? "⚠ Margine" : "✗ Non sostenibile"}
-                      </span>
-                    </div>
+                  <div className="space-y-2 text-xs text-slate-400">
+                    <p>• <strong className="text-slate-300">Modello B2B2C:</strong> Sindacati/CAF integrano Lavoroinchiaro</p>
+                    <p>• <strong className="text-slate-300">Revenue Share:</strong> Lavoroinchiaro €0,69, Partner €0,30</p>
+                    <p>• <strong className="text-slate-300">Scalabilità:</strong> 11,6M iscritti sindacali Italia + EU equivalenti</p>
+                    <p>• <strong className="text-slate-300">Prioritari:</strong> CGIL, CISL, UIL (Italia) + CGT, CFDT (Francia) + IG Metall, Verdi (Germania)</p>
                   </div>
                 </div>
               </div>
             </section>
 
             {/* ═══════════════════════════════════════════════════════════
-                7. RACCOMANDAZIONE FINALE
+                6. RISCHI REALI
             ═══════════════════════════════════════════════════════════ */}
-            <section id="recommendation">
+            <section id="rischi">
+              <SectionHeader
+                number="Sezione 06"
+                title="Rischi Reali e Mitigazioni"
+                subtitle="Analisi critica: cosa potrebbe andare male e come gestirlo"
+                verdict={{ label: "Gestibili", type: "warning" }}
+              />
+
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-white/10">
+                        <th className="text-left px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Rischio</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Probabilità</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Impatto</th>
+                        <th className="text-left px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Mitigazione</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {risks.map((risk, i) => (
+                        <tr key={i} className="border-b border-white/5 hover:bg-white/3 transition-colors">
+                          <td className="px-5 py-3 font-medium text-xs text-slate-300">{risk.risk}</td>
+                          <td className="px-5 py-3 text-xs text-center">
+                            <Badge type={risk.probability === "Alta" ? "danger" : risk.probability === "Media" ? "warning" : "info"}>
+                              {risk.probability}
+                            </Badge>
+                          </td>
+                          <td className="px-5 py-3 text-xs text-center">
+                            <Badge type={risk.impact === "Critico" ? "critical" : risk.impact === "Alto" ? "danger" : "warning"}>
+                              {risk.impact}
+                            </Badge>
+                          </td>
+                          <td className="px-5 py-3 text-xs text-slate-400">{risk.mitigation}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            {/* ═══════════════════════════════════════════════════════════
+                7. RESPONSO FINALE
+            ═══════════════════════════════════════════════════════════ */}
+            <section id="responso">
               <SectionHeader
                 number="Sezione 07"
-                title="Raccomandazione Finale: Il Modello Ottimale"
-                subtitle="Quale modello scegliere per scalare rapidamente e sostenibilmente"
-                verdict={{ label: "Modello Ibrido Consigliato", type: "positive" }}
+                title="Responso Finale di Investimento"
+                subtitle="Verdict critico e realistico senza hype"
+                verdict={{ label: "Investibile", type: "positive" }}
               />
 
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 {[
                   {
-                    rank: "1° Scelta",
-                    name: "Ibrido: Freemium + Pay-Per + Pro",
-                    color: "#06B6D4",
-                    ltv: "€67,50",
-                    ratio: "6,75x",
-                    breakeven: "8 mesi",
-                    why: "Massima flessibilità, cattura tutti i segmenti, LTV robusto, opzioni di upgrade naturali",
-                    pros: [
-                      "LTV medio-alto (€67,50)",
-                      "LTV/CAC ratio sostenibile (6,75x)",
-                      "Break-even in 8 mesi",
-                      "Tre tier per diversi bisogni",
-                      "Upsell naturale da free a Pro"
+                    title: "✓ INVESTIBILE",
+                    subtitle: "Pre-Seed €300-500K",
+                    details: [
+                      "Break-even mese 8-9",
+                      "LTV/CAC 6,75x sostenibile",
+                      "ROI 36 mesi: 83-225x",
+                      "Upside EU massivo"
                     ],
-                    cons: [
-                      "Complesso da gestire",
-                      "Richiede UX molto chiara",
-                      "Analytics sofisticato necessario"
-                    ]
+                    color: "emerald"
                   },
                   {
-                    rank: "2° Scelta",
-                    name: "Ultra-Low: €0,99/mese Illimitato",
-                    color: "#10B981",
-                    ltv: "€95,04",
-                    ratio: "10,56x",
-                    breakeven: "3 mesi",
-                    why: "Break-even rapidissimo, massima retention, pricing irresistibile, ma richiede scala massiva",
-                    pros: [
-                      "LTV altissimo (€95,04)",
-                      "Break-even in 3 mesi",
-                      "Retention massima (96%)",
-                      "Pricing psicologico irresistibile",
-                      "Facile da spiegare"
+                    title: "Condizioni Critiche",
+                    subtitle: "Senza queste, rischio fallimento",
+                    details: [
+                      "Team con expertise CCNL",
+                      "MVP entro 4 mesi",
+                      "CAC ≤ €5 (SEO/partnership)",
+                      "Churn ≤ 8% (retention)"
                     ],
-                    cons: [
-                      "Margine lordo molto basso",
-                      "Richiede scala massiva (250K utenti)",
-                      "Difficile monetizzare ulteriormente",
-                      "Dipendente da CAC basso"
-                    ]
+                    color: "amber"
                   },
                   {
-                    rank: "3° Scelta",
-                    name: "B2B2C: Partnership CAF/Sindacati",
-                    color: "#8B5CF6",
-                    ltv: "€39,90",
-                    ratio: "79,8x",
-                    breakeven: "1 mese",
-                    why: "CAC quasi zero, break-even istantaneo, ma richiede partnership difficili da negoziare",
-                    pros: [
-                      "CAC quasi zero",
-                      "LTV/CAC ratio massimo (79,8x)",
-                      "Break-even in 1 mese",
-                      "Distribuzione garantita",
-                      "Scalabilità rapida"
+                    title: "Downside",
+                    subtitle: "Cosa potrebbe andare male",
+                    details: [
+                      "CAC rimane €9+",
+                      "Churn > 10%",
+                      "Compliance complessa",
+                      "Concorrenza ChatGPT"
                     ],
-                    cons: [
-                      "Richiede partnership",
-                      "Margine ridotto (€3,99 vs €5,99)",
-                      "Dipendenza da partner",
-                      "Negoziazione 3-6 mesi"
-                    ]
+                    color: "red"
                   }
-                ].map((option, i) => (
-                  <div key={i} className="bg-slate-800/60 border border-white/10 rounded-xl p-6 flex flex-col" style={{ borderTopColor: option.color, borderTopWidth: 2 }}>
-                    <div className="mb-4">
-                      <div className="text-xs font-mono mb-1" style={{ color: option.color }}>{option.rank}</div>
-                      <h3 className="font-bold text-white text-sm mb-2" style={{ fontFamily: "'Space Grotesk', sans-serif", color: option.color }}>
-                        {option.name}
-                      </h3>
-                      <p className="text-xs text-slate-400 leading-relaxed mb-3">{option.why}</p>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-2 mb-4 pb-4 border-b border-white/10">
-                      <div>
-                        <div className="text-xs text-slate-500 mb-1">LTV</div>
-                        <div className="font-mono font-bold text-sm" style={{ color: option.color }}>{option.ltv}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-slate-500 mb-1">Ratio</div>
-                        <div className="font-mono font-bold text-sm" style={{ color: option.color }}>{option.ratio}</div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-slate-500 mb-1">Break-even</div>
-                        <div className="font-mono font-bold text-sm" style={{ color: option.color }}>{option.breakeven}</div>
-                      </div>
-                    </div>
-
-                    <div className="flex-1">
-                      <div className="text-xs font-semibold text-emerald-400 mb-2">Pro</div>
-                      <div className="space-y-1 mb-4">
-                        {option.pros.map((pro, j) => (
-                          <p key={j} className="text-xs text-slate-400 flex items-start gap-2">
-                            <span className="text-emerald-400 mt-0.5">✓</span>
-                            <span>{pro}</span>
-                          </p>
-                        ))}
-                      </div>
-
-                      <div className="text-xs font-semibold text-amber-400 mb-2">Contro</div>
-                      <div className="space-y-1">
-                        {option.cons.map((con, j) => (
-                          <p key={j} className="text-xs text-slate-400 flex items-start gap-2">
-                            <span className="text-amber-400 mt-0.5">⚠</span>
-                            <span>{con}</span>
-                          </p>
-                        ))}
-                      </div>
+                ].map((section, i) => (
+                  <div key={i} className={`bg-slate-800/60 border rounded-xl p-6 ${
+                    section.color === "emerald" ? "border-emerald-500/30" :
+                    section.color === "amber" ? "border-amber-500/30" : "border-red-500/30"
+                  }`}>
+                    <h3 className={`font-semibold text-sm mb-2 ${
+                      section.color === "emerald" ? "text-emerald-400" :
+                      section.color === "amber" ? "text-amber-400" : "text-red-400"
+                    }`} style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                      {section.title}
+                    </h3>
+                    <p className="text-xs text-slate-400 mb-3">{section.subtitle}</p>
+                    <div className="space-y-1">
+                      {section.details.map((detail, j) => (
+                        <p key={j} className="text-xs text-slate-400 flex items-start gap-2">
+                          <span className={
+                            section.color === "emerald" ? "text-emerald-400" :
+                            section.color === "amber" ? "text-amber-400" : "text-red-400"
+                          }>
+                            {section.color === "emerald" ? "✓" : section.color === "amber" ? "⚠" : "✗"}
+                          </span>
+                          <span>{detail}</span>
+                        </p>
+                      ))}
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Final recommendation */}
-              <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 rounded-xl p-8 mb-6">
-                <div className="text-xs font-mono text-cyan-400 uppercase tracking-widest mb-3">Raccomandazione Finale</div>
+              <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/30 rounded-xl p-8">
+                <div className="text-xs font-mono text-blue-400 uppercase tracking-widest mb-3">Verdict Finale</div>
                 <h3 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                  Lanciare con il Modello Ibrido
+                  ✓ INVESTIBILE
                 </h3>
                 <p className="text-slate-300 leading-relaxed mb-4">
-                  Il modello <strong className="text-cyan-400">Ibrido (Freemium + Pay-Per-Error + Pro con Chatbot)</strong> è il più equilibrato:
-                  combina acquisizione rapida (freemium), monetizzazione immediata (pay-per-error €3,99), e upsell naturale (Pro €9,99/mese).
-                  LTV/CAC ratio di 6,75x è sostenibile, break-even in 8 mesi è realistico, e la complessità è gestibile con UX chiara.
+                  Lavoroinchiaro.it è investibile come pre-seed €300-500K con il modello Ibrido ottimizzato verso Ultra-Low.
+                  Break-even realistico in mese 8-9, profittabilità sostenibile (EBITDA +€784K anno 2), upside massivo con
+                  espansione europea (TAM €13M+). Rischi gestibili con execution corretta. ROI atteso 83-225x in 36 mesi.
                 </p>
-
-                <div className="grid md:grid-cols-3 gap-4 mb-4">
+                <div className="grid md:grid-cols-4 gap-4">
                   {[
-                    { phase: "Mesi 1-3", task: "MVP Freemium + Pay-Per", detail: "Lancio con 15 CCNL, analisi base gratuita, upsell a €3,99" },
-                    { phase: "Mesi 4-6", task: "Chatbot Beta", detail: "Sviluppo chatbot specializzato, test con Pro users" },
-                    { phase: "Mesi 7-12", task: "Scale & Optimize", detail: "Marketing SEO, partnership CAF, ottimizzazione retention" },
+                    { label: "Valutazione Pre-Seed", value: "€400K" },
+                    { label: "Dilution", value: "12%" },
+                    { label: "Break-even", value: "Mese 8-9" },
+                    { label: "ROI 36m", value: "83-225x" },
                   ].map((item, i) => (
-                    <div key={i} className="bg-slate-800/40 rounded-lg p-4">
-                      <div className="text-xs font-mono text-cyan-400 mb-1">{item.phase}</div>
-                      <div className="text-sm font-semibold text-white mb-1">{item.task}</div>
-                      <p className="text-xs text-slate-400">{item.detail}</p>
+                    <div key={i}>
+                      <div className="text-xs text-slate-400 mb-1">{item.label}</div>
+                      <div className="text-lg font-bold text-blue-400 font-mono">{item.value}</div>
                     </div>
                   ))}
-                </div>
-
-                <div className="text-xs text-slate-400">
-                  <strong className="text-slate-300">Nota:</strong> Se il CAC organico (SEO) rimane sotto €5, il modello Ultra-Low (€0,99/mese)
-                  diventa più interessante. Se riuscite a negoziare partnership CAF, il modello B2B2C offre scalabilità massima.
-                </div>
-              </div>
-
-              {/* Comparison matrix */}
-              <div className="bg-slate-800/60 border border-white/10 rounded-xl overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
-                    <thead>
-                      <tr className="border-b border-white/10">
-                        <th className="text-left px-4 py-3 font-mono text-slate-500 uppercase tracking-wide">Metrica</th>
-                        {businessModels.slice(0, 4).map((m) => (
-                          <th key={m.id} className="text-center px-4 py-3 font-mono text-slate-500 uppercase tracking-wide">{m.name}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[
-                        { metric: "LTV", key: "ltv" },
-                        { metric: "CAC", key: "cac" },
-                        { metric: "Ratio", key: "ratio" },
-                        { metric: "Break-even", key: "breakeven_months" },
-                        { metric: "Churn", key: "churn_monthly" },
-                        { metric: "Year 3 Revenue", key: "year3_revenue" },
-                      ].map((row) => (
-                        <tr key={row.metric} className="border-b border-white/5">
-                          <td className="px-4 py-2 font-mono text-slate-500">{row.metric}</td>
-                          {businessModels.slice(0, 4).map((m) => {
-                            const value = m[row.key as keyof typeof m];
-                            let display = "";
-                            if (row.key === "ltv" || row.key === "cac") display = "€" + (value as number).toFixed(2);
-                            else if (row.key === "ratio") display = (value as number).toFixed(2) + "x";
-                            else if (row.key === "breakeven_months") display = (value as number) + "m";
-                            else if (row.key === "churn_monthly") display = ((value as number) * 100).toFixed(1) + "%";
-                            else if (row.key === "year3_revenue") display = "€" + ((value as number) / 1000).toFixed(0) + "K";
-                            return (
-                              <td key={m.id} className="px-4 py-2 text-center font-mono" style={{ color: m.color }}>
-                                {display}
-                              </td>
-                            );
-                          })}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
                 </div>
               </div>
             </section>
@@ -1311,16 +860,16 @@ export default function Home() {
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <div className="text-sm font-semibold text-white mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                  Lavoroinchiaro.it — Business Model Analysis Completa
+                  Lavoroinchiaro.it — Pitch Completo Interattivo
                 </div>
                 <div className="text-xs text-slate-500">
-                  7 modelli di business, unit economics dettagliati, timeline di lancio, strategie di retention, chatbot specializzato
+                  Analisi critica, verità verificabile, senza hype. Febbraio 2026.
                 </div>
               </div>
               <div className="flex gap-2 flex-wrap">
-                <Badge type="premium">7 Modelli</Badge>
-                <Badge type="info">Analisi Completa</Badge>
-                <Badge type="positive">Pronto per Lancio</Badge>
+                <Badge type="critical">VERITÀ</Badge>
+                <Badge type="info">Completo</Badge>
+                <Badge type="positive">Investibile</Badge>
               </div>
             </div>
             <div className="mt-4 text-xs text-slate-600 max-w-3xl">
