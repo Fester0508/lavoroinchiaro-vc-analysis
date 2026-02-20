@@ -301,8 +301,6 @@ export default function Home() {
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <Badge type="critical">VERITÀ</Badge>
-            <Badge type="info">Completo</Badge>
             <button
               onClick={() => setNavOpen(!navOpen)}
               className="md:hidden p-2 text-slate-400 hover:text-white transition-colors"
