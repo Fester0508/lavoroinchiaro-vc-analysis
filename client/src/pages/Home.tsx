@@ -362,7 +362,7 @@ export default function Home() {
 
             <div className="relative max-w-4xl">
               <div className="flex items-center gap-2 mb-6 flex-wrap">
-                <Badge type="critical">ANALISI CRITICA</Badge>
+                <Badge type="critical">REV. DEF</Badge>
                 <Badge type="info">Senza Hype</Badge>
                 <Badge type="positive">Verità Verificabile</Badge>
               </div>
@@ -1215,8 +1215,8 @@ export default function Home() {
                   Analisi critica, verità verificabile, senza hype. Febbraio 2026.
                 </div>
               </div>
-              <div className="flex gap-2 flex-wrap">
-                <Badge type="critical">VERITÀ</Badge>
+              <div className="flex items-center gap-2">
+                <Badge type="critical">REV. DEF</Badge>
                 <Badge type="info">Completo</Badge>
                 <Badge type="positive">Investibile</Badge>
               </div>
