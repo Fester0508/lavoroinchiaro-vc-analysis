@@ -90,7 +90,8 @@ const sections = [
   { id: "modelli", label: "2. Modelli di Business" },
   { id: "scelto", label: "3. Modello Scelto" },
   { id: "proiezioni", label: "4. Proiezioni Finanziarie" },
-  { id: "detailed-projections", label: "4B. Proiezioni Dettagliate" },
+  { id: "detailed-projections", label: "4B. Proiezioni Dettagliate (Modello 1)" },
+  { id: "detailed-projections-model2", label: "4C. Proiezioni Modello 2" },
   { id: "eu-expansion", label: "5. Espansione EU" },
   { id: "rischi", label: "6. Rischi Reali" },
   { id: "responso", label: "7. Responso Finale" },
@@ -281,6 +282,16 @@ export default function Home() {
     { period: "1 anno", revenue: 364.5, costs: 195.5, ebitda: 169.0, users: 75000, status: "profitable" },
     { period: "3 anni", revenue: 5550, costs: 2050, ebitda: 3500, users: 750000, status: "scale" },
     { period: "5 anni", revenue: 12000, costs: 3600, ebitda: 8400, users: 1500000, status: "mature" },
+  ];
+
+  const detailedProjectionsModel2 = [
+    { period: "30 giorni", revenue: 1.2, costs: 8.5, ebitda: -7.3, users: 800, status: "lancio" },
+    { period: "90 giorni", revenue: 8.5, costs: 19.0, ebitda: -10.5, users: 5000, status: "early" },
+    { period: "120 giorni", revenue: 15.2, costs: 23.5, ebitda: -8.3, users: 8000, status: "growth" },
+    { period: "180 giorni", revenue: 95.4, costs: 65.0, ebitda: +30.4, users: 25000, status: "transition" },
+    { period: "1 anno", revenue: 582.0, costs: 215.0, ebitda: +367.0, users: 120000, status: "profitable" },
+    { period: "3 anni", revenue: 8200, costs: 2400, ebitda: +5800, users: 1100000, status: "scale" },
+    { period: "5 anni", revenue: 18500, costs: 4200, ebitda: +14300, users: 2200000, status: "mature" },
   ];
 
   return (
@@ -833,9 +844,151 @@ export default function Home() {
             </section>
 
             {/* ═══════════════════════════════════════════════════════════
-                5. ESPANSIONE EUROPEA
+                4C. PROIEZIONI MODELLO 2: PAY-PER-ONLY (ALTERNATIVA)
             ═══════════════════════════════════════════════════════════ */}
-            <section id="eu-expansion">
+            <section id="detailed-projections-model2">
+              <SectionHeader
+                number="Sezione 4C"
+                title="Modello 2: Pay-Per-Only (Alternativa)"
+                subtitle="Proiezioni 30gg-5anni: monetizzazione immediata, crescita aggressiva, break-even più veloce"
+                verdict={{ label: "Alternativa", type: "info" }}
+              />
+
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6 mb-8">
+                <p className="text-sm text-slate-400 mb-4">
+                  <strong>Modello 2 (Pay-Per-Only):</strong> Free (€0) → Pay-Per €3,99 (per anomalia) con conversion 20% e media 2,2 anomalie/cedolino × 12 cedolini/anno = €105/anno per utente. Niente abbonamento ricorrente, monetizzazione immediata e aggressiva.
+                </p>
+              </div>
+
+              {/* Grafico timeline modello 2 */}
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6 mb-8">
+                <h3 className="text-sm font-semibold text-slate-300 mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Ricavi, Costi, EBITDA — Modello 2 (Pay-Per-Only)
+                </h3>
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={detailedProjectionsModel2}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#1E293B" />
+                      <XAxis dataKey="period" tick={{ fill: "#94A3B8", fontSize: 9 }} angle={-45} textAnchor="end" height={80} />
+                      <YAxis tick={{ fill: "#64748B", fontSize: 11 }} tickFormatter={(v) => `€${v}K`} />
+                      <Tooltip content={<CustomTooltip suffix="K" />} />
+                      <Legend wrapperStyle={{ color: "#94A3B8", fontSize: 11 }} />
+                      <Line type="monotone" dataKey="revenue" stroke="#10B981" strokeWidth={2} name="Revenue" dot={{ fill: "#10B981", r: 4 }} />
+                      <Line type="monotone" dataKey="costs" stroke="#EF4444" strokeWidth={2} name="Costi" dot={{ fill: "#EF4444", r: 4 }} />
+                      <Line type="monotone" dataKey="ebitda" stroke="#F59E0B" strokeWidth={2} name="EBITDA" dot={{ fill: "#F59E0B", r: 4 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Tabella modello 2 */}
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl overflow-hidden mb-8">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-white/10">
+                        <th className="text-left px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Periodo</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Ricavi (€K)</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Costi (€K)</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">EBITDA (€K)</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Utenti</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Margine %</th>
+                        <th className="text-center px-5 py-3 text-xs font-mono text-slate-500 uppercase tracking-wide">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {detailedProjectionsModel2.map((proj, i) => {
+                        const margin = proj.revenue > 0 ? ((proj.ebitda / proj.revenue) * 100).toFixed(1) : "N/A";
+                        const statusColor = proj.ebitda >= 0 ? "#10B981" : proj.ebitda > -10 ? "#F59E0B" : "#EF4444";
+                        const statusLabel = proj.ebitda >= 0 ? "✓ Profittabile" : proj.ebitda > -10 ? "⚠ Quasi break-even" : "✗ In perdita";
+                        return (
+                          <tr key={i} className="border-b border-white/5 hover:bg-white/3 transition-colors">
+                            <td className="px-5 py-3 font-medium text-xs text-slate-300">{proj.period}</td>
+                            <td className="px-5 py-3 font-mono text-xs text-center text-emerald-400">€{proj.revenue.toFixed(1)}</td>
+                            <td className="px-5 py-3 font-mono text-xs text-center text-red-400">€{proj.costs.toFixed(1)}</td>
+                            <td className="px-5 py-3 font-mono text-xs text-center" style={{ color: statusColor }}>
+                              €{proj.ebitda.toFixed(1)}
+                            </td>
+                            <td className="px-5 py-3 font-mono text-xs text-center text-slate-400">
+                              {proj.users >= 1000 ? `${(proj.users / 1000).toFixed(0)}K` : proj.users}
+                            </td>
+                            <td className="px-5 py-3 font-mono text-xs text-center" style={{ color: statusColor }}>
+                              {margin}%
+                            </td>
+                            <td className="px-5 py-3 text-xs text-center" style={{ color: statusColor }}>
+                              {statusLabel}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Comparazione Modello 1 vs Modello 2 */}
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6 mb-8">
+                <h3 className="text-sm font-semibold text-slate-300 mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Comparazione: Modello 1 (Ibrido) vs Modello 2 (Pay-Per-Only)
+                </h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr className="border-b border-white/10">
+                        <th className="text-left px-4 py-2 text-slate-500 uppercase tracking-wide">Metrica</th>
+                        <th className="text-center px-4 py-2 text-slate-500 uppercase tracking-wide">Modello 1 (Ibrido)</th>
+                        <th className="text-center px-4 py-2 text-slate-500 uppercase tracking-wide">Modello 2 (Pay-Per)</th>
+                        <th className="text-center px-4 py-2 text-slate-500 uppercase tracking-wide">Vincitore</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { metric: "Break-even", m1: "Mese 8-9", m2: "Mese 6-7", winner: "Modello 2" },
+                        { metric: "Anno 1 Revenue", m1: "€364,5K", m2: "€582K", winner: "Modello 2" },
+                        { metric: "Anno 1 EBITDA", m1: "€169K", m2: "€367K", winner: "Modello 2" },
+                        { metric: "Anno 3 Revenue", m1: "€5,55M", m2: "€8,2M", winner: "Modello 2" },
+                        { metric: "Anno 3 EBITDA", m1: "€3,5M", m2: "€5,8M", winner: "Modello 2" },
+                        { metric: "Utenti Anno 1", m1: "75K", m2: "120K", winner: "Modello 2" },
+                        { metric: "Utenti Anno 3", m1: "750K", m2: "1,1M", winner: "Modello 2" },
+                        { metric: "LTV/CAC Ratio", m1: "6,75x", m2: "8,2x", winner: "Modello 2" },
+                        { metric: "Churn Mensile", m1: "8%", m2: "12%", winner: "Modello 1" },
+                        { metric: "Retention", m1: "Ricorrente", m2: "Una tantum", winner: "Modello 1" },
+                      ].map((item, i) => (
+                        <tr key={i} className="border-b border-white/5">
+                          <td className="px-4 py-2 font-medium text-slate-300">{item.metric}</td>
+                          <td className="px-4 py-2 text-center text-slate-400">{item.m1}</td>
+                          <td className="px-4 py-2 text-center text-slate-400">{item.m2}</td>
+                          <td className="px-4 py-2 text-center font-semibold" style={{ color: item.winner === "Modello 2" ? "#10B981" : "#3B82F6" }}>
+                            {item.winner}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Verdict Comparazione */}
+              <div className="bg-gradient-to-r from-blue-500/10 to-amber-500/10 border border-blue-500/30 rounded-xl p-8">
+                <div className="text-xs font-mono text-blue-400 uppercase tracking-widest mb-3">Perché Modello 1 (Ibrido) è Scelto</div>
+                <h3 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Modello 1 Vince su Retention e Sostenibilità
+                </h3>
+                <p className="text-slate-300 leading-relaxed mb-4">
+                  Anche se Modello 2 (Pay-Per-Only) offre revenue e EBITDA più alti nel breve termine (anno 1-2), Modello 1 (Ibrido) è scelto perché:
+                </p>
+                <ul className="space-y-2 text-slate-300 text-sm">
+                  <li><strong className="text-blue-400">✓ Retention ricorrente:</strong> Abbonamento €0,99/mese garantisce LTV stabile e prevedibile</li>
+                  <li><strong className="text-blue-400">✓ Churn inferiore:</strong> 8% vs 12% (utenti abituati a pagare regolarmente)</li>
+                  <li><strong className="text-blue-400">✓ Scalabilità sostenibile:</strong> ARPU stabile, non dipendente da anomalie</li>
+                  <li><strong className="text-blue-400">✓ Partnership più facili:</strong> Sindacati preferiscono revenue ricorrente</li>
+                  <li><strong className="text-blue-400">✓ Valutazione exit migliore:</strong> SaaS ricorrente vale 6-8x revenue vs 3-4x pay-per</li>
+                </ul>
+                <p className="text-slate-400 text-xs mt-4 italic">
+                  Modello 2 è backup strategico se retention ricorrente fallisce (pivot rapido possibile).
+                </p>
+              </div>
+
               <SectionHeader
                 number="Sezione 05"
                 title="Strategia di Espansione in Europa"
