@@ -93,6 +93,7 @@ const sections = [
   { id: "eu-expansion", label: "5. Espansione EU" },
   { id: "rischi", label: "6. Rischi Reali" },
   { id: "responso", label: "7. Responso Finale" },
+  { id: "pricing", label: "8. Modello di Pricing" },
 ];
 
 // ─── Custom Tooltip ────────────────────────────────────────────────────────
@@ -218,6 +219,57 @@ export default function Home() {
     { risk: "Concorrenza ChatGPT", probability: "Alta", impact: "Medio", mitigation: "Specializzazione CCNL, chatbot proprietario" },
     { risk: "Adozione digitale bassa", probability: "Media", impact: "Medio", mitigation: "UX semplice, marketing offline, partnership" },
     { risk: "Partnership CAF difficili", probability: "Media", impact: "Medio", mitigation: "Negoziazione diretta, revenue share" },
+  ];
+
+  const pricingTiers = [
+    {
+      name: "Free",
+      price: "€0",
+      description: "Analisi base senza upload dati sensibili",
+      features: ["Verifica cedolino base", "Rilevamento anomalie comuni", "Report semplice", "Nessun dato salvato"],
+      color: "slate",
+      target: "Acquisizione",
+      ltv: "€0",
+      conversion_next: "15%"
+    },
+    {
+      name: "Pay-Per-Error",
+      price: "€3,99",
+      description: "Paghi solo quando trovi anomalie",
+      features: ["Analisi completa", "Rilevamento anomalie avanzate", "Report dettagliato", "Storico cedolini"],
+      color: "blue",
+      target: "Monetizzazione Immediata",
+      ltv: "€24,75",
+      conversion_next: "25%"
+    },
+    {
+      name: "Abbonamento Ultra-Low",
+      price: "€0,99/mese",
+      description: "Illimitato, meno di 1€ al mese",
+      features: ["Analisi illimitata", "Alert automatici", "Storico completo", "Supporto email"],
+      color: "emerald",
+      target: "Retention & Scalabilità",
+      ltv: "€95,04",
+      conversion_next: "40%"
+    },
+    {
+      name: "Pro + Chatbot",
+      price: "€9,99/mese",
+      description: "Chatbot specializzato in diritto del lavoro",
+      features: ["Tutto di Ultra-Low", "Chatbot 24/7", "Consulenza personalizzata", "Priorità support"],
+      color: "pink",
+      target: "Upsell Premium",
+      ltv: "€119,88",
+      conversion_next: "10%"
+    }
+  ];
+
+  const conversionFunnel = [
+    { stage: "Visitatori", count: 100000, color: "#64748B" },
+    { stage: "Free Users", count: 75000, color: "#64748B" },
+    { stage: "Pay-Per (€3,99)", count: 11250, color: "#3B82F6" },
+    { stage: "Abbonamento (€0,99)", count: 2812, color: "#10B981" },
+    { stage: "Pro (€9,99)", count: 281, color: "#EC4899" },
   ];
 
   return (
@@ -854,6 +906,163 @@ export default function Home() {
             </section>
 
           </div>
+
+            {/* ═══════════════════════════════════════════════════════════
+                8. MODELLO DI PRICING
+            ═══════════════════════════════════════════════════════════ */}
+            <section id="pricing">
+              <SectionHeader
+                number="Sezione 08"
+                title="Modello di Pricing da Adottare"
+                subtitle="4 tier ottimizzati per acquisizione, monetizzazione, retention, e upsell"
+                verdict={{ label: "Strategico", type: "positive" }}
+              />
+
+              {/* Pricing Tiers */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                {pricingTiers.map((tier, i) => {
+                  const colorMap = {
+                    slate: { bg: "bg-slate-800/60", border: "border-slate-600/30", text: "text-slate-400", accent: "#94A3B8" },
+                    blue: { bg: "bg-blue-900/20", border: "border-blue-500/30", text: "text-blue-400", accent: "#3B82F6" },
+                    emerald: { bg: "bg-emerald-900/20", border: "border-emerald-500/30", text: "text-emerald-400", accent: "#10B981" },
+                    pink: { bg: "bg-pink-900/20", border: "border-pink-500/30", text: "text-pink-400", accent: "#EC4899" },
+                  };
+                  const colors = colorMap[tier.color as keyof typeof colorMap];
+                  return (
+                    <div key={i} className={`${colors.bg} border-2 ${colors.border} rounded-xl p-5 transition-all hover:border-opacity-100`}>
+                      <div className="mb-4">
+                        <h3 className="font-semibold text-white text-sm mb-1" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                          {tier.name}
+                        </h3>
+                        <div className={`text-2xl font-bold font-mono ${colors.text} mb-2`}>{tier.price}</div>
+                        <p className="text-xs text-slate-400 mb-2">{tier.description}</p>
+                        <div className="text-xs font-mono" style={{ color: colors.accent }}>LTV: {tier.ltv}</div>
+                      </div>
+                      <div className="border-t border-white/10 pt-3 mb-3">
+                        <div className="text-xs font-mono text-slate-500 mb-2 uppercase tracking-wide">Features</div>
+                        <ul className="space-y-1">
+                          {tier.features.map((feat, j) => (
+                            <li key={j} className="text-xs text-slate-400 flex items-start gap-2">
+                              <span style={{ color: colors.accent }}>✓</span>
+                              <span>{feat}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="bg-white/5 rounded px-2 py-1.5">
+                        <div className="text-xs text-slate-500 mb-1">Target: {tier.target}</div>
+                        <div className="text-xs font-mono" style={{ color: colors.accent }}>Conv. next: {tier.conversion_next}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Conversion Funnel */}
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6 mb-8">
+                <h3 className="text-sm font-semibold text-slate-300 mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Conversion Funnel — 100K Visitatori
+                </h3>
+                <div className="space-y-2">
+                  {conversionFunnel.map((stage, i) => {
+                    const percentage = (stage.count / 100000) * 100;
+                    return (
+                      <div key={i}>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs font-medium text-slate-300">{stage.stage}</span>
+                          <span className="text-xs font-mono text-slate-400">{stage.count.toLocaleString("it-IT")} ({percentage.toFixed(1)}%)</span>
+                        </div>
+                        <div className="w-full bg-slate-700/40 rounded-full h-2 overflow-hidden">
+                          <div
+                            className="h-full transition-all"
+                            style={{ width: `${percentage}%`, backgroundColor: stage.color }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Customer Journey */}
+              <div className="bg-slate-800/60 border border-white/10 rounded-xl p-6 mb-8">
+                <h3 className="text-sm font-semibold text-slate-300 mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Customer Journey Raccomandato
+                </h3>
+                <div className="space-y-4">
+                  {[
+                    {
+                      stage: "1. Acquisizione",
+                      action: "Free (€0)",
+                      goal: "75K utenti",
+                      tactics: "SEO, referral, partnership CAF",
+                      color: "slate"
+                    },
+                    {
+                      stage: "2. Monetizzazione Immediata",
+                      action: "Pay-Per €3,99",
+                      goal: "15% conversion = 11,25K",
+                      tactics: "Alert anomalie, CTA in-app, email",
+                      color: "blue"
+                    },
+                    {
+                      stage: "3. Retention",
+                      action: "Abbonamento €0,99/mese",
+                      goal: "25% upsell = 2,8K",
+                      tactics: "Alert ricorrenti, storico cedolini, UX semplice",
+                      color: "emerald"
+                    },
+                    {
+                      stage: "4. Upsell Premium",
+                      action: "Pro €9,99/mese",
+                      goal: "10% upsell = 281",
+                      tactics: "Chatbot specializzato, consulenza personalizzata",
+                      color: "pink"
+                    }
+                  ].map((item, i) => {
+                    const colorMap = { slate: "#94A3B8", blue: "#3B82F6", emerald: "#10B981", pink: "#EC4899" };
+                    return (
+                      <div key={i} className="border-l-2 pl-4" style={{ borderColor: colorMap[item.color as keyof typeof colorMap] }}>
+                        <div className="flex items-center justify-between mb-2">
+                          <h4 className="font-semibold text-sm text-white">{item.stage}</h4>
+                          <span className="text-xs font-mono" style={{ color: colorMap[item.color as keyof typeof colorMap] }}>
+                            {item.action}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-400 mb-1">{item.goal}</p>
+                        <p className="text-xs text-slate-500">Tactics: {item.tactics}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Pricing Recommendation */}
+              <div className="bg-gradient-to-r from-emerald-500/10 to-blue-500/10 border border-emerald-500/30 rounded-xl p-8">
+                <div className="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-3">Raccomandazione Finale</div>
+                <h3 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Adotta il Modello Ibrido a 4 Tier
+                </h3>
+                <p className="text-slate-300 leading-relaxed mb-6">
+                  <strong>Free</strong> per acquisizione massiva (75K utenti) → <strong>Pay-Per €3,99</strong> per monetizzazione immediata (15% conversion) →
+                  <strong> Abbonamento €0,99/mese</strong> per retention ricorrente (25% upsell) → <strong>Pro €9,99/mese</strong> per upsell premium (10% upsell).
+                  Questo modello massimizza sia acquisizione che monetizzazione, con LTV/CAC ratio 6,75x sostenibile.
+                </p>
+                <div className="grid md:grid-cols-4 gap-4">
+                  {[
+                    { label: "ARPU Medio", value: "€0,56/mese" },
+                    { label: "LTV 12 mesi", value: "€7,00" },
+                    { label: "LTV 24 mesi", value: "€14,00" },
+                    { label: "LTV Ottimizzato", value: "€67,50" },
+                  ].map((item, i) => (
+                    <div key={i}>
+                      <div className="text-xs text-slate-400 mb-1">{item.label}</div>
+                      <div className="text-lg font-bold text-emerald-400 font-mono">{item.value}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
 
           {/* Footer */}
           <footer className="border-t border-white/5 px-6 md:px-10 py-8 mt-10">
